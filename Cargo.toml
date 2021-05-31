@@ -1,0 +1,27 @@
+[package]
+name = "enjoy"
+version = "0.1.0"
+authors = ["Tuncay D <mamehiscore@aol.com>"]
+description = "Play any game rom with associated emulator in RetroArch"
+readme = "README.md"
+repository = "https://github.com/thingsiplay/enjoy/"
+license = "MIT"
+keywords = ["retroarch", "libretro", "emulation", "run", "launcher", "roms"]
+categories = ["command-line-utilities", "emulators"]
+edition = "2018"
+resolver = "2"
+publish = true
+
+[dependencies]
+configparser = "2.0.1"
+structopt = "0.3.21"
+atty = "0.2.14"
+shellexpand = "2.1.0"
+wildmatch = "2.1.0"
+open = "1.7.0"
+
+[profile.release]
+opt-level = "z"
+codegen-units = 1
+lto = true
+panic = "abort"
