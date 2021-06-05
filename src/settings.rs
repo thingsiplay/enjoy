@@ -107,7 +107,9 @@ impl Settings {
     }
 
     /// Parse own commandline arguments and create a new Settings struct out of it.
-    pub fn new_from_cmdline(options: Option<Vec<String>>) -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_cmdline(
+        options: Option<Vec<String>>,
+    ) -> Result<Settings, Box<dyn Error>> {
         let mut settings: Settings = Settings::new();
 
         let args = match options {
@@ -161,7 +163,9 @@ impl Settings {
 
     /// Parse the `RetroArch` own configuration `retroarch.cfg` file and create a new Settings struct
     /// out of it.
-    pub fn new_from_retroarch_config(file: &Option<PathBuf>) -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_retroarch_config(
+        file: &Option<PathBuf>,
+    ) -> Result<Settings, Box<dyn Error>> {
         let mut settings: Settings = Settings::new();
 
         // If no file was given, then search at `RetroArch` default locations for the file `retroarch.cfg`.
@@ -175,8 +179,10 @@ impl Settings {
         keys_to_get.insert("libretro_directory".to_string());
 
         // Parse.
-        let retroarch_config_map =
-            retroarch::parse_retroarch_config(&settings.retroarch_config, &keys_to_get)?;
+        let retroarch_config_map = retroarch::parse_retroarch_config(
+            &settings.retroarch_config,
+            &keys_to_get,
+        )?;
 
         // Extract values.
         if let Some(value) = retroarch_config_map.get("libretro_directory") {
@@ -210,7 +216,9 @@ impl Settings {
     /// [.md, .gen]
     /// libretro = genesis_plus_gx
     /// ```
-    pub fn new_from_config(file: &Option<PathBuf>) -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_config(
+        file: &Option<PathBuf>,
+    ) -> Result<Settings, Box<dyn Error>> {
         let mut settings: Settings = Settings::new();
 
         // `path` is needed as an extra variable, in case of returning an error message later.
@@ -250,16 +258,22 @@ impl Settings {
         // [.smc .sfc]
         // core = snes
         // libretro = snes9x
-        let extension_rules =
-            Settings::read_config_extension_rules(&settings.cores_rules, &ini, &section_names);
+        let extension_rules = Settings::read_config_extension_rules(
+            &settings.cores_rules,
+            &ini,
+            &section_names,
+        );
         if !extension_rules.is_empty() {
             settings.extension_rules.replace(extension_rules);
         }
 
         // [/home/user/roms/genesis_wide]
         // core = mdwide
-        let directory_rules =
-            Settings::read_config_directory_rules(&settings.cores_rules, &ini, &section_names);
+        let directory_rules = Settings::read_config_directory_rules(
+            &settings.cores_rules,
+            &ini,
+            &section_names,
+        );
         if !directory_rules.is_empty() {
             settings.directory_rules.replace(directory_rules);
         }
@@ -335,7 +349,9 @@ impl Settings {
             // Get valid entries only and convert to `(String, String)`.
             for (core_alias, libretro_path) in cores
                 .iter()
-                .filter(|(_, v)| !v.as_ref().unwrap_or(&"".to_string()).is_empty())
+                .filter(|(_, v)| {
+                    !v.as_ref().unwrap_or(&"".to_string()).is_empty()
+                })
                 .map(|(k, v)| (k.to_string(), v.as_ref().unwrap()))
             {
                 cores_rules.insert(core_alias, PathBuf::from(libretro_path));
@@ -360,7 +376,9 @@ impl Settings {
     ) -> HashMap<String, PathBuf> {
         let mut extension_rules: HashMap<String, PathBuf> = HashMap::new();
 
-        for pattern_group in section_names.iter().filter(|e| e.starts_with('.')) {
+        for pattern_group in
+            section_names.iter().filter(|e| e.starts_with('.'))
+        {
             // [.smc .sfc]
             // Iterate over each extension and remove their leading dot.
             for ext_pattern in pattern_group
@@ -374,11 +392,16 @@ impl Settings {
                 }
                 // core = snes
                 // Lookup matching libretro path from rules.
-                else if let Some(core_alias) = ini.get(&pattern_group, "core") {
+                else if let Some(core_alias) =
+                    ini.get(&pattern_group, "core")
+                {
                     // [cores]
                     // snes = snes9x
-                    if let Some(path) = cores_rules.as_ref().unwrap().get(&core_alias) {
-                        extension_rules.insert(ext_pattern, PathBuf::from(path));
+                    if let Some(path) =
+                        cores_rules.as_ref().unwrap().get(&core_alias)
+                    {
+                        extension_rules
+                            .insert(ext_pattern, PathBuf::from(path));
                     }
                 }
             }
@@ -423,7 +446,9 @@ impl Settings {
             else if let Some(core_alias) = ini.get(&original, "core") {
                 // [cores]
                 // snes = snes9x
-                if let Some(path) = cores_rules.as_ref().unwrap().get(&core_alias) {
+                if let Some(path) =
+                    cores_rules.as_ref().unwrap().get(&core_alias)
+                {
                     directory_rules.insert(expanded, PathBuf::from(path));
                 }
             }
@@ -435,7 +460,10 @@ impl Settings {
     /// Merge another `Settings` into current one.  Ignore new keys without `Some` values and
     /// replace the old ones otherwise.  The `games` key is different, as it will always add
     /// entries from it to the front of the existing old list.
-    pub fn update_from(&mut self, overwrite: Settings) -> Result<(), Box<dyn Error>> {
+    pub fn update_from(
+        &mut self,
+        overwrite: Settings,
+    ) -> Result<(), Box<dyn Error>> {
         if !overwrite.games.is_empty() {
             if self.games.is_empty() {
                 self.games = overwrite.games;
@@ -508,7 +536,10 @@ impl Settings {
     /// `None`.  Only a few keys are affected, currently `retroarch`, `retroarch_config`,
     /// `libretro` and `libretro_directory`.  This method serves as default values to be set at
     /// last moment, if the user did not already fill in those keys.
-    pub fn update_defaults_from(&mut self, overwrite: Settings) -> Result<(), Box<dyn Error>> {
+    pub fn update_defaults_from(
+        &mut self,
+        overwrite: Settings,
+    ) -> Result<(), Box<dyn Error>> {
         if self.retroarch.is_none() {
             self.retroarch = overwrite.retroarch;
         }
@@ -553,7 +584,9 @@ impl Settings {
             if let Some(core) = &self.core {
                 match &self.cores_rules {
                     Some(rules) => libretro = rules.get(core).cloned(),
-                    None => return Err("No core rules found in `[cores]`.".into()),
+                    None => {
+                        return Err("No core rules found in `[cores]`.".into())
+                    }
                 };
             }
 
@@ -663,7 +696,8 @@ impl Settings {
     fn select_game(&self) -> Option<PathBuf> {
         match &self.filter {
             Some(filter) => {
-                let pattern = WildMatch::new(&format!("*{}*", filter.to_lowercase()));
+                let pattern =
+                    WildMatch::new(&format!("*{}*", filter.to_lowercase()));
 
                 for game in &self.games {
                     if pattern.matches(
@@ -751,7 +785,8 @@ impl Settings {
     /// `highlander` is active.  Otherwise its always `false`.
     #[must_use]
     pub fn there_can_only_be_one(&self) -> bool {
-        self.highlander.unwrap_or(false) && retroarch::is_running("retroarch", true)
+        self.highlander.unwrap_or(false)
+            && retroarch::is_running("retroarch", true)
     }
 
     /// Execute the given `Command` to run the program with its arguments and return its `output`.
@@ -760,7 +795,8 @@ impl Settings {
         if self.norun.unwrap_or(false) {
             None
         } else {
-            let output = command.output().expect("Error! Could not run RetroArch.");
+            let output =
+                command.output().expect("Error! Could not run RetroArch.");
             if output.status.to_string() != *"exit code: 0" {
                 eprintln!("Could not run RetroArch. {}", output.status)
             }
@@ -842,7 +878,8 @@ mod tests {
     }
 
     #[test]
-    fn new_from_cmdline_emptygame_then_retroarch() -> Result<(), Box<dyn Error>> {
+    fn new_from_cmdline_emptygame_then_retroarch() -> Result<(), Box<dyn Error>>
+    {
         let mut options: Vec<String> = vec![];
         options.push("enjoy".to_string());
         options.push("".to_string());
@@ -926,7 +963,10 @@ mod tests {
             "md".to_string(),
             PathBuf::from("genesis_plus_gx_libretro.so"),
         );
-        cores_rules.insert("mdwide".to_string(), PathBuf::from("genesis_plus_gx_wide"));
+        cores_rules.insert(
+            "mdwide".to_string(),
+            PathBuf::from("genesis_plus_gx_wide"),
+        );
 
         cores_rules
     }
@@ -936,7 +976,11 @@ mod tests {
         let mut settings = super::Settings::new();
         let ini = test_ini_template();
 
-        super::Settings::read_config_options(&mut settings, &ini, &["options".to_string()])?;
+        super::Settings::read_config_options(
+            &mut settings,
+            &ini,
+            &["options".to_string()],
+        )?;
 
         assert_eq!(
             Some(PathBuf::from("/usr/bin/retroarch")),
@@ -953,7 +997,11 @@ mod tests {
         let mut settings = super::Settings::new();
         let ini = test_ini_template();
 
-        super::Settings::read_config_options(&mut settings, &ini, &["options".to_string()])?;
+        super::Settings::read_config_options(
+            &mut settings,
+            &ini,
+            &["options".to_string()],
+        )?;
 
         assert_eq!(Some(false), settings.which);
         assert_eq!(Some(true), settings.norun);
@@ -1051,10 +1099,11 @@ mod tests {
     #[test]
     fn select_game_first() {
         //let ini = test_ini_template();
-        let games: Vec<PathBuf> = ["zelda.smc", "mario.smc", "sonic.md", "game4.gb"]
-            .iter()
-            .map(|g| PathBuf::from(g))
-            .collect();
+        let games: Vec<PathBuf> =
+            ["zelda.smc", "mario.smc", "sonic.md", "game4.gb"]
+                .iter()
+                .map(|g| PathBuf::from(g))
+                .collect();
         let mut settings = super::Settings {
             games: games,
             config: None,

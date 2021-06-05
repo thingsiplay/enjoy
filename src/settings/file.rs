@@ -99,7 +99,8 @@ mod tests {
 
     #[test]
     fn to_fullpath_does_not_exist() {
-        let path: PathBuf = PathBuf::from("~/../../bin/filedoesnotexist!(@)/$+");
+        let path: PathBuf =
+            PathBuf::from("~/../../bin/filedoesnotexist!(@)/$+");
         let output = super::to_fullpath(&path);
 
         assert_eq!(output, None);

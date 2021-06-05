@@ -19,8 +19,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
-    let user_config = Settings::new_from_config(argument_options.get_config())?;
-    let ignore_stdin: bool = argument_options.is_nostdin() || user_config.is_nostdin();
+    let user_config =
+        Settings::new_from_config(argument_options.get_config())?;
+    let ignore_stdin: bool =
+        argument_options.is_nostdin() || user_config.is_nostdin();
     let stdin_games = Settings::new_from_stdin(ignore_stdin)?;
 
     let mut app_settings: Settings = Settings::new();
@@ -38,7 +40,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     if !app_settings.is_libretro_path_available() {
         // Only search and read the `retroarch.cfg`, if `libretro_directory` or a fullpath
         // including a direcotory of `libretro` was not set by the user.
-        let raconfig = Settings::new_from_retroarch_config(app_settings.get_retroarch_config())?;
+        let raconfig = Settings::new_from_retroarch_config(
+            app_settings.get_retroarch_config(),
+        )?;
         defaults.update_from(raconfig)?;
     }
     // Overwrite fields in app_settings only, if their values are not set yet (meaning None).
