@@ -1,4 +1,6 @@
 mod settings;
+
+use crate::settings::RunCommand;
 use crate::settings::Settings;
 
 use std::error::Error;
@@ -25,7 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         argument_options.is_nostdin() || user_config.is_nostdin();
     let stdin_games = Settings::new_from_stdin(ignore_stdin)?;
 
-    let mut app_settings: Settings = Settings::new();
+    let mut app_settings = Settings::new();
     // Overwrite fields in app_settings only, if new fields are Some().
     app_settings.update_from(user_config)?;
     app_settings.update_from(stdin_games)?;
@@ -49,7 +51,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     app_settings.update_defaults_from(defaults)?;
 
     // Build the final commandline for RetroArch and execute it, if permitted.
-    let mut run = app_settings.build_command()?;
+    let mut run: RunCommand = app_settings.build_command()?;
     if app_settings.there_can_only_be_one() {
         eprintln!("retroarch process already running. There Can Be Only One!");
     } else {

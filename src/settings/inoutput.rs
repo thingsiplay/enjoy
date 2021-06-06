@@ -22,7 +22,7 @@ pub(crate) fn list_from_stdin() -> Result<Vec<String>, Box<dyn Error>> {
 
 /// Prints out a non empty path.
 pub fn print_path(path: &Option<PathBuf>) {
-    let string_path = file::to_str(path.as_ref());
+    let string_path: String = file::to_str(path.as_ref());
 
     if !string_path.is_empty() {
         println!("{}", string_path);

@@ -11,7 +11,7 @@ use configparser::ini;
 /// Check if a process is running.  If `print_pid` is `true`, then print the pid of found process
 /// to stdout.
 pub(crate) fn is_running(process_name: &str, print_pid: bool) -> bool {
-    let mut cmdline = Command::new(String::from("pidof"));
+    let mut cmdline: Command = Command::new(String::from("pidof"));
 
     // return one PID only
     cmdline.arg("--single-shot");
@@ -70,7 +70,7 @@ pub(crate) fn parse_retroarch_config(
     path: &Option<PathBuf>,
     lookup_keys: &HashSet<String>,
 ) -> Result<HashMap<String, String>, Box<dyn Error>> {
-    let mut ini: ini::Ini = ini::Ini::new_cs();
+    let mut ini = ini::Ini::new_cs();
 
     match ini.load(
         &path

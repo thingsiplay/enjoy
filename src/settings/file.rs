@@ -51,7 +51,7 @@ pub(crate) fn to_str(file: Option<&PathBuf>) -> String {
 /// The extension is part of `endswith` suffix check.
 pub(crate) fn endswith(endswith: &str, mut file: PathBuf) -> PathBuf {
     if !endswith.is_empty() {
-        let filename = file
+        let filename: &str = file
             .file_name()
             .unwrap_or_default()
             .to_str()

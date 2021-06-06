@@ -16,6 +16,7 @@ use structopt::StructOpt;
 /// $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
 ///
 /// $ ls -1 ./snes/* | enjoy --filter '[!]' --core snes --which --highlander
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, StructOpt)]
 pub(crate) struct Opt {
     /// Path to ROM file

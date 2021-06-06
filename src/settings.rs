@@ -115,7 +115,7 @@ impl Settings {
     ) -> Result<Settings, Box<dyn Error>> {
         let mut settings: Settings = Settings::new();
 
-        let args = match options {
+        let args: Opt = match options {
             Some(from) => Opt::from_iter(from.iter()),
             None => Opt::from_args(),
         };
@@ -251,7 +251,8 @@ impl Settings {
 
         // [cores]
         // snes = snes9x
-        let cores_rules = Settings::read_config_cores_rules(&ini);
+        let cores_rules: HashMap<String, PathBuf> =
+            Settings::read_config_cores_rules(&ini);
         if !cores_rules.is_empty() {
             settings.cores_rules.replace(cores_rules);
         }
@@ -259,22 +260,24 @@ impl Settings {
         // [.smc .sfc]
         // core = snes
         // libretro = snes9x
-        let extension_rules = Settings::read_config_extension_rules(
-            &settings.cores_rules,
-            &ini,
-            &section_names,
-        );
+        let extension_rules: HashMap<String, PathBuf> =
+            Settings::read_config_extension_rules(
+                &settings.cores_rules,
+                &ini,
+                &section_names,
+            );
         if !extension_rules.is_empty() {
             settings.extension_rules.replace(extension_rules);
         }
 
         // [/home/user/roms/genesis_wide]
         // core = mdwide
-        let directory_rules = Settings::read_config_directory_rules(
-            &settings.cores_rules,
-            &ini,
-            &section_names,
-        );
+        let directory_rules: HashMap<String, PathBuf> =
+            Settings::read_config_directory_rules(
+                &settings.cores_rules,
+                &ini,
+                &section_names,
+            );
         if !directory_rules.is_empty() {
             settings.directory_rules.replace(directory_rules);
         }
@@ -584,7 +587,8 @@ impl Settings {
     /// execute and a few more data.
     pub fn build_command(&self) -> Result<RunCommand, String> {
         // `--retroarch`
-        let mut command = Command::new(&file::to_str(self.retroarch.as_ref()));
+        let mut command: Command =
+            Command::new(&file::to_str(self.retroarch.as_ref()));
 
         // `game`
         let game: Option<PathBuf> = match self.select_game() {
@@ -718,7 +722,7 @@ impl Settings {
     fn select_game(&self) -> Option<PathBuf> {
         match &self.filter {
             Some(filter) => {
-                let pattern =
+                let pattern: WildMatch =
                     WildMatch::new(&format!("*{}*", filter.to_lowercase()));
 
                 for game in &self.games {
@@ -817,7 +821,7 @@ impl Settings {
         if self.norun.unwrap_or(false) {
             None
         } else {
-            let output =
+            let output: Output =
                 command.output().expect("Error! Could not run RetroArch.");
             if output.status.to_string() != *"exit code: 0" {
                 eprintln!("Could not run RetroArch. {}", output.status)
