@@ -8,8 +8,8 @@ use std::process::Command;
 
 use configparser::ini;
 
-/// Check if a process with the name `retroarch` is running.  If `print_pid` is true, then let
-/// `pidof` print to stdout, which is the pid of the process looking for.
+/// Check if a process is running.  If `print_pid` is `true`, then print the pid of found process
+/// to stdout.
 pub(crate) fn is_running(process_name: &str, print_pid: bool) -> bool {
     let mut cmdline = Command::new(String::from("pidof"));
 
@@ -28,7 +28,7 @@ pub(crate) fn is_running(process_name: &str, print_pid: bool) -> bool {
 }
 
 /// Searches the default locations for the file `retroarch.cfg`, which is the main
-/// configuration file for `RetroArch`.  Their tilde or environment variables are expanded
+/// configuration file of `RetroArch`.  Their tilde or environment variables are expanded
 /// accordingly.  The locations are:
 ///     1. `$XDG_CONFIG_HOME/retroarch/retroarch.cfg`
 ///     2. `~/.config/retroarch/retroarch.cfg`
@@ -63,7 +63,7 @@ pub(crate) fn search_default_config() -> Option<PathBuf> {
 }
 
 /// Parses a `RetroArch` configuration file and returns a `HashMap` from it.  The format is like
-/// a regular Ini file without sections.  The set `lookup_keys` contains all key names to look
+/// a regular INI file without sections.  The set `lookup_keys` contains all key names to look
 /// for in the file and extract only those key and value pairs as strings.  The surrounding
 /// double quotes are removed from the value.
 pub(crate) fn parse_retroarch_config(

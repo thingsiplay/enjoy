@@ -17,19 +17,22 @@ use configparser::ini;
 use structopt::StructOpt;
 use wildmatch::WildMatch;
 
-/// `process::Command` to run, including additional information.  The `output` must be set manually
-/// after executing the command found in structs `cmdline`.
+/// The final `process::Command` to execute, bundled together with related information for quick
+/// access.  Those related path informations must be set manually when building the `cmdline`.
+/// They point to the arguments used in the command, such as the path to a `game`.  The `output`
+/// must be set manually after executing the `cmdline` process.
 #[derive(Debug)]
 pub struct RunCommand {
-    //
     pub cmdline: Command,
     pub game: PathBuf,
     pub libretro: PathBuf,
     pub output: Option<Output>,
 }
 
-/// Program settings.  Intended to be filled from various sources, like user configuration or
-/// commandline arguments.  This serves as the source to build the final `retroarch` command.
+/// Configuration of the main program.  The intended use case is to create multiple `Settings` data
+/// from various places like commandline arguments or user configuration file.  Then all those
+/// `Settings` data should be merged into a single one, which will be used as the source when
+/// finally building the `RunCommand`.  Which is then used to execute `retroarch` program itself.
 #[derive(Debug)]
 pub struct Settings {
     games: Vec<PathBuf>,
@@ -161,8 +164,8 @@ impl Settings {
         Ok(settings)
     }
 
-    /// Parse the `RetroArch` own configuration `retroarch.cfg` file and create a new Settings struct
-    /// out of it.
+    /// Parse `retroarch.cfg` the own configuration file of `RetroArch` itself and create a new
+    /// `Settings` struct out of it.
     pub fn new_from_retroarch_config(
         file: &Option<PathBuf>,
     ) -> Result<Settings, Box<dyn Error>> {
@@ -174,11 +177,10 @@ impl Settings {
             None => retroarch::search_default_config(),
         };
 
-        // The list of key names to search for in the file and limit its parsed output.
+        // The list of key names to search and extract.  Ignore all other.
         let mut keys_to_get: HashSet<String> = HashSet::new();
         keys_to_get.insert("libretro_directory".to_string());
 
-        // Parse.
         let retroarch_config_map = retroarch::parse_retroarch_config(
             &settings.retroarch_config,
             &keys_to_get,
@@ -192,7 +194,7 @@ impl Settings {
         Ok(settings)
     }
 
-    /// Parse the programs user configuration ini file and create a new Settings struct out of it.
+    /// Parse programs user configuration INI file and create a new `Settings` struct out of it.
     ///
     /// Example structure:
     ///
@@ -221,7 +223,6 @@ impl Settings {
     ) -> Result<Settings, Box<dyn Error>> {
         let mut settings: Settings = Settings::new();
 
-        // `path` is needed as an extra variable, in case of returning an error message later.
         let path: PathBuf = match file {
             Some(p) => p.clone(),
             None => return Ok(settings),
@@ -288,8 +289,23 @@ impl Settings {
     /// including a dash inside the argument name (in example `--retroarch-config`) will in the
     /// file use underscore instead (in example `retroarch_config`).
     ///
+    /// Read all key/value pairs from section `[options]` in the INI.  Only existing keys are
+    /// updated on the corresponding `Settings` fields, without affecting the others.  These are
+    /// the same options found in the programs commandlline arguments (use `enjoy --help` to find
+    /// out more).  There are only a couple of differences to it:
+    ///
+    ///     - There is only one `game` entry instead of a list.
+    ///     - Some options about the configuration file itself are not present here, because they
+    ///     are evaluated before loading the INI: `--config`, `--open-config` or `--noconfig`.
+    ///     - Flags in the commandline can be used here with a value of `1` or `true` to indicate
+    ///     they are active.  This is needed, because each key or option in the INI file has a
+    ///     value, which is not the case on the commandline.  An example would be `--norun`, which
+    ///     is then translated into INI key `norun = 1`.
+    ///
+    /// ```ini
     /// [options]
     /// retroarch = /usr/bin/retroarch
+    /// ```
     fn read_config_options(
         settings: &mut Settings,
         ini: &ini::Ini,
@@ -337,11 +353,13 @@ impl Settings {
         Ok(())
     }
 
-    /// Read in the alias mappings for `core` names with their associated `libretro` path in the
-    /// section `[cores]` from ini.
+    /// Extract user defined alias mappings for `core` names and their associated `path` in section
+    /// `[cores]`.
     ///
+    /// ```ini
     /// [cores]
     /// snes = snes9x
+    /// ```
     fn read_config_cores_rules(ini: &ini::Ini) -> HashMap<String, PathBuf> {
         let mut cores_rules: HashMap<String, PathBuf> = HashMap::new();
 
@@ -364,11 +382,13 @@ impl Settings {
     /// Read in all rules for the extensions from ini.  `extension_rules` start with a dot in their
     /// section name like `[.smc .sfc]`.  Multiple extensions can be space separated per rule.  The
     /// leading dot will be removed.  Any `core` rule will be resolved to a `libretro` path by
-    /// looking up corresponding alias in `cores_rules`.  But an existing `libretro` rule have
-    /// higher priority.
+    /// looking up corresponding alias in `cores_rules`.  An existing `libretro` rule have higher
+    /// priority over `core` rule.
     ///
+    /// ```ini
     /// [.smc .sfc]
     /// core = snes
+    /// ```
     fn read_config_extension_rules(
         cores_rules: &Option<HashMap<String, PathBuf>>,
         ini: &ini::Ini,
@@ -410,13 +430,16 @@ impl Settings {
         extension_rules
     }
 
-    /// Read in all rules for the directories from ini.  `directory_rules` include a slash in their
-    /// section name like `[/emulators/roms/psx]`.  The tilde will be expanded to users home
-    /// directory.  Any `core` rule will be resolved to a `libretro` path by looking up
-    /// corresponding alias in `cores_rules`.  But an existing `libretro` rule have higher priority.
+    /// Read in all rules for the directories from ini.  `directory_rules` include a slash
+    /// somewhere in their section name like `[/emulators/roms/psx]`.  The starting tilde will be
+    /// expanded to users home directory.  Any `core` rule will be resolved to a `libretro` path by
+    /// looking up corresponding alias in `cores_rules`.  An existing `libretro` rule have higher
+    /// priority over `core` rule.
     ///
+    /// ```ini
     /// [/home/user/roms/genesis_wide]
     /// core = mdwide
+    /// ```
     fn read_config_directory_rules(
         cores_rules: &Option<HashMap<String, PathBuf>>,
         ini: &ini::Ini,
@@ -457,9 +480,9 @@ impl Settings {
         directory_rules
     }
 
-    /// Merge another `Settings` into current one.  Ignore new keys without `Some` values and
-    /// replace the old ones otherwise.  The `games` key is different, as it will always add
-    /// entries from it to the front of the existing old list.
+    /// Merge current `Settings` with a new one.  Overwrite values only, if the new value is
+    /// `Some`. The `games` key is different, as the new list in `games` will be prepended to
+    /// current existing list.
     pub fn update_from(
         &mut self,
         overwrite: Settings,
@@ -534,8 +557,7 @@ impl Settings {
 
     /// Update current Settings from new Settings.  Replace the content only, if the old value is
     /// `None`.  Only a few keys are affected, currently `retroarch`, `retroarch_config`,
-    /// `libretro` and `libretro_directory`.  This method serves as default values to be set at
-    /// last moment, if the user did not already fill in those keys.
+    /// `libretro` and `libretro_directory`.
     pub fn update_defaults_from(
         &mut self,
         overwrite: Settings,
@@ -557,8 +579,8 @@ impl Settings {
     }
 
     /// Build up the final `RetroArch` run command from the current Settings.  This is the command
-    /// and its options that is used when running `retroarch` commandline application.  It will be
-    /// wrapped up in a separate `RunCommand` struct, which itself includes the commandline to
+    /// and its options that is used when executing `retroarch` commandline application.  It will
+    /// be wrapped up in a separate `RunCommand` struct, which itself includes the commandline to
     /// execute and a few more data.
     pub fn build_command(&self) -> Result<RunCommand, String> {
         // `--retroarch`
@@ -689,7 +711,7 @@ impl Settings {
         None
     }
 
-    /// Extract the first game entry from current settings `games` list.  If any filter is
+    /// Extract the first game entry from current Settings `games` list.  If any filter is
     /// available, then apply it before extraction.  The comparison is always in lowercase.
     /// Supported special characters are only the star "*", for matching anything and questionmark
     /// "?", for matching a single character.  The filter will be enclosed by stars automatically.
@@ -734,7 +756,7 @@ impl Settings {
         Ok(false)
     }
 
-    /// Get the user configuration ini file path from `config` option in current Settings.  Default
+    /// Get the user configuration INI file path from `config` option in current Settings.  Default
     /// to `None`, if option `noconfig` is active.
     #[must_use]
     pub fn get_config(&self) -> &Option<PathBuf> {

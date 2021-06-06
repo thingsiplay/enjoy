@@ -38,14 +38,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut defaults = Settings::new_from_defaults()?;
     if !app_settings.is_libretro_path_available() {
-        // Only search and read the `retroarch.cfg`, if `libretro_directory` or a fullpath
-        // including a direcotory of `libretro` was not set by the user.
+        // Extract keys and values from `retroarch.cfg` only if the path to `libretro` installation
+        // directory in `RetroArch` is unknown.
         let raconfig = Settings::new_from_retroarch_config(
             app_settings.get_retroarch_config(),
         )?;
         defaults.update_from(raconfig)?;
     }
-    // Overwrite fields in app_settings only, if their values are not set yet (meaning None).
+    // Overwrite only those keys in `app_settings`, which their values are currently `None`.
     app_settings.update_defaults_from(defaults)?;
 
     // Build the final commandline for RetroArch and execute it, if permitted.

@@ -4,24 +4,26 @@ use structopt::StructOpt;
 
 /// Play any game ROM with associated emulator in `"RetroArch"`.
 ///
-/// This program is a launcher to run the `"RetroArch"` commandline program to play the games
-/// directly.  A path to a game rom must be specified through an argument or stdin pipe. Depending
-/// on the file extension and the rules in the user configuration file, a predefined emulator core
-/// will be selected.  Use option `-h` for compact summary or `--help` for longer description of
-/// options.  <https://github.com/thingsiplay/enjoy/>
+/// `enjoy` is a launcher to run games from `RetroArch` without using the GUI.  It is a wrapper
+/// around the `retroarch` commandline application.  The main functionality comes from a user
+/// configuration file with rules to associate file extensions and emulator cores.  When running
+/// **enjoy** only the path to a ROM file is required, either through arguments or the stdin.  Use
+/// option `-h` for compact summary or `--help` for longer description of options.
+/// <https://github.com/thingsiplay/enjoy/>
 ///
 /// Examples:
 ///
-/// $ enjoy -F1 '~/roms/snes/Super Mario World (U) [!].smc'
+/// $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
 ///
-/// $ ls -1 ./snes/* | enjoy --filter '[!]' --core snesgood --which
+/// $ ls -1 ./snes/* | enjoy --filter '[!]' --core snes --which --highlander
 #[derive(Debug, StructOpt)]
 pub(crate) struct Opt {
-    /// Path to ROM file to play
+    /// Path to ROM file
     ///
-    /// If multiple files are specified, then the first entry is picked.  Each line from stdin is
-    /// added as a game entry too.  Globbing and wildcards are not supported and should be resolved
-    /// by the shell.  Relative paths and the tilde are supported and expanded.
+    /// If multiple files are specified, then the first entry is picked when starting emulator.
+    /// Each line from stdin is added as a game entry too.  Globbing and wildcards are not
+    /// supported and should be resolved by the shell.  Relative paths and the tilde are supported
+    /// and expanded.
     ///
     /// Example: "~/roms/snes/Super Mario World (U) [\!].smc"
     #[structopt(parse(from_os_str))]
@@ -29,10 +31,9 @@ pub(crate) struct Opt {
 
     /// Path to the user settings
     ///
-    /// This programs own configuration file in the INI format contains extension rules and core
-    /// naming aliases to actual libretro files.  The commandline arguments with the same name as
-    /// the options in this file have higher priority over the settings.  Whenever the program
-    /// runs, these settings are loaded and looked up.
+    /// This programs own configuration file in INI format.  It contains all user defined rules to
+    /// associated extensions and core name aliases.  Any option specified at commandline have
+    /// higher priority over the individual settings in this file.
     ///
     /// Example: "/home/user/.config/enjoy/alternative.ini"
     #[structopt(
@@ -47,8 +48,8 @@ pub(crate) struct Opt {
 
     /// Path or name of `RetroArch` command
     ///
-    /// The executable name or path to the RetroArch commandline application to run.  This can be a
-    /// fullpath or a filename only, in which case it will be searched in the system `$PATH`.
+    /// The executable name or path to the RetroArch commandline application to run.  If this is a
+    /// filename without directory part, then the systems `$PATH` is searched.
     ///
     /// Example: "/usr/bin/retroarch" [default: retroarch]
     #[structopt(
@@ -63,8 +64,8 @@ pub(crate) struct Opt {
     /// Path to `RetroArch` base configuration
     ///
     /// The `retroarch.cfg` base configuration file of `RetroArch` itself.  Usually it is found in
-    /// the config folder of `RetroArch` itself.  By default these locations in this order are
-    /// looked up: `$XDG_CONFIG_HOME/retroarch/retroarch.cfg`,
+    /// the config folder of `RetroArch` itself.  By default these locations are looked up in this
+    /// particular order: `$XDG_CONFIG_HOME/retroarch/retroarch.cfg`,
     /// `$HOME/.config/retroarch/retroarch.cfg`, `$HOME/.retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/retroarch.cfg"
@@ -79,12 +80,12 @@ pub(crate) struct Opt {
 
     /// Force specific libretro core by filename
     ///
-    /// The explicit filename of the emulator in `RetroArch`.  This option overwrites any
-    /// previously setting or rule and forces to launch the specified emulator.  It can be a
-    /// fullpath or a filename only, in which case it will be looked up in the directory specified
-    /// at `libretro-directory`.  The filename part `_libretro.so` is optional and will be added
-    /// automatically when needed.  `snes9x` could be expanded into
-    /// `/home/user/.config/retroarch/cores/snes9x_libretro.so` as an example.
+    /// The explicit filename of the emulator in `RetroArch`.  This option overwrites any previous
+    /// setting or rule and forces to launch the specified emulator.  This can be a fullpath or
+    /// filename only.  If this is filename only, then the directory part is looked up from
+    /// `libretro-directory`.  The filename part `_libretro.so` is optional and will be added
+    /// automatically.  As an example `snes9x` could be expanded into
+    /// `/home/user/.config/retroarch/cores/snes9x_libretro.so`.
     ///
     /// Example: "snes9x"
     #[structopt(
@@ -97,12 +98,11 @@ pub(crate) struct Opt {
     )]
     pub(crate) libretro: Option<PathBuf>,
 
-    /// Directory of libretro core files for `RetroArch`
+    /// Directory of libretro core files
     ///
-    /// The installation directory of the libretro emulator cores.  This will be used to lookup if
-    /// the `libretro` setting or option is a relative filename only, and ignored otherwise.  At
-    /// default this value will be looked up and read from the `RetroArch` base configuration file
-    /// `retroarch.cfg`.
+    /// The installation directory of libretro cores.  It is looked up whenever the `libretro` path
+    /// is a relative filename.  At default this directory is extracted from `RetroArch` base
+    /// configuration file `retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/cores"
     #[structopt(
@@ -118,7 +118,7 @@ pub(crate) struct Opt {
     ///
     /// A custom identificator specified in the user configuration INI file.  The alias will be
     /// looked up and resolved into a real `libretro` path.  These are specified under the section
-    /// `[cores]` as `name=libretro`.
+    /// `[cores]` as `alias=libretro_path`.
     ///
     /// Example: "snes"
     #[structopt(short = "C", long, value_name = "ALIAS", display_order = 3)]
@@ -129,9 +129,9 @@ pub(crate) struct Opt {
     /// Removes all games from the list, which do not match the `pattern`.  The wildcard
     /// functionality is limited and only the star `*` and questionmark `?` are supported.  The
     /// comparison is always case insensitive.  It will compare the base filename portion of the
-    /// ROM path to the pattern, ignoring it's parent directory and filename extension parts.  At
-    /// default a star is added in front and end of pattern automatically when comparing.  This
-    /// option is useful if more than one game entry is given to the program.
+    /// ROM path to the pattern, ignoring it's parent directory and filename extension.  At default
+    /// a star is added in front and end of pattern automatically when comparing.  This option is
+    /// useful if more than one game entry is given to the program.
     ///
     /// Example: "mario*[\!]"
     #[structopt(short = "f", long, value_name = "PATTERN", display_order = 2)]
@@ -151,22 +151,22 @@ pub(crate) struct Opt {
 
     /// There Can Only Be One!
     ///
-    /// Prevents from running another `retroarch` process, if one is already active.  In this case
-    /// the command to play will not execute.
+    /// Prevents running another `retroarch` process, if one is already active.  In this case the
+    /// final command of the emulator will not execute.
     #[structopt(short = "1", long, display_order = 2)]
     pub(crate) highlander: bool,
 
     /// Show user settings
     ///
-    /// Opens the current config INI file of this program with it's associated default application.
+    /// Opens the user config INI file with it's associated default application.
     #[structopt(short = "o", long, display_order = 3)]
     pub(crate) open_config: bool,
 
     /// Ignore user settings
     ///
     /// The config INI file of this program will be ignored and not loaded up.  The entire
-    /// application relies on commandline options and environmental variables.  Which means that
-    /// any predefined rules and aliases are ignored.
+    /// application relies on commandline options and environmental variables.  Therefore any
+    /// predefined rules and aliases from that file are ignored.
     #[structopt(
         short = "i",
         long,
@@ -178,7 +178,7 @@ pub(crate) struct Opt {
     /// Do not run `RetroArch`
     ///
     /// The `retroarch` run command to play ROMs will not be executed.  Internally the process is
-    /// still simulated, just before the point of running the emulator.
+    /// still simulated, up until to the point of running the emulator.
     #[structopt(short = "x", long, display_order = 4)]
     pub(crate) norun: bool,
 
