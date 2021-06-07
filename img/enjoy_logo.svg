@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    id="svg8"
    version="1.1"
-   viewBox="0 0 81.954292 42.631811"
-   height="161.12808"
-   width="309.7485">
+   viewBox="0 0 82.202436 31.885881"
+   height="120.51355"
+   width="310.68637">
   <defs
      id="defs2">
     <rect
@@ -36,22 +36,23 @@
      id="rect860"
      width="91.394142"
      height="73.514465"
-     x="-4.8899503"
+     x="-4.8317938"
      y="-18.995899" />
   <text
      xml:space="preserve"
      style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;line-height:1.25;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:none;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     x="-0.5545845"
+     x="-0.49642798"
      y="21.071449"
      id="text841"><tspan
        id="tspan839"
-       x="-0.5545845"
+       x="-0.49642798"
        y="21.071449"
        style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Enjoy</tspan></text>
   <g
      aria-label="Enjoy"
      id="text843"
-     style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;line-height:1.25;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
+     style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;line-height:1.25;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     transform="translate(0.05815652)">
     <path
        d="M 0.26458347,21.071449 3.8143114,3.3228098 H 15.664941 L 14.954996,6.9817601 H 7.4186505 L 6.8179273,10.094598 H 13.098215 L 12.38827,13.753549 H 6.1079817 l -0.7645568,3.65895 h 7.7547901 l -0.709945,3.65895 z"
        style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -66,7 +67,7 @@
        id="path849" />
     <path
        d="m 55.585605,21.399116 q -1.447197,0 -2.594032,-0.436889 -1.11953,-0.43689 -1.938698,-1.228752 -0.791862,-0.791862 -1.228752,-1.911392 -0.409584,-1.146835 -0.409584,-2.539421 0,-1.85678 0.655335,-3.358588 0.68264,-1.529114 1.774864,-2.5940324 1.119529,-1.0649184 2.566726,-1.6383359 1.447197,-0.6007232 2.97631,-0.6007232 1.419891,0 2.566727,0.4368896 1.146835,0.4368896 1.938697,1.2287519 0.819168,0.7918624 1.228752,1.938698 0.43689,1.119529 0.43689,2.512115 0,1.85678 -0.68264,3.385894 -0.655335,1.501808 -1.774864,2.566726 -1.092224,1.064919 -2.539421,1.665642 -1.447197,0.573417 -2.97631,0.573417 z m 0.327667,-3.549727 q 0.600723,0 1.174141,-0.327668 0.600723,-0.327667 1.037612,-0.901084 0.464196,-0.600724 0.737252,-1.419892 0.273056,-0.846473 0.273056,-1.884086 0,-1.310669 -0.573418,-1.993309 -0.546112,-0.68264 -1.501808,-0.68264 -0.628029,0 -1.201446,0.327668 -0.573418,0.327667 -1.037613,0.92839 -0.43689,0.573418 -0.709946,1.419891 -0.273056,0.846474 -0.273056,1.856781 0,1.310669 0.546112,1.993309 0.573418,0.68264 1.529114,0.68264 z"
-       style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:none;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path851" />
     <path
        d="m 66.289356,26.204902 q -0.791862,0 -1.529114,-0.218445 -0.737251,-0.191139 -1.146835,-0.491501 l 1.201447,-2.949004 q 0.327667,0.163833 0.819168,0.300361 0.518806,0.136528 0.92839,0.136528 1.037613,0 1.692947,-0.354973 0.68264,-0.354972 1.092224,-1.064918 l 0.354973,-0.600723 -2.97631,-13.5435773 h 4.205062 l 0.873779,5.2972863 q 0.163834,1.037613 0.300362,2.266365 0.163833,1.228752 0.24575,2.102531 h 0.109222 q 0.382279,-0.873779 0.955696,-2.102531 0.573418,-1.228752 1.11953,-2.266365 l 2.73056,-5.2972863 h 4.423507 l -7.75479,13.6527993 q -1.529114,2.675949 -3.331283,3.904701 -1.80217,1.228752 -4.314285,1.228752 z"
@@ -75,11 +76,11 @@
   </g>
   <g
      id="g845"
-     transform="matrix(3.1598134,0,0,3.1598134,-146.69225,-176.75287)"
+     transform="matrix(2.5766817,0,0,2.5766817,-109.25714,-140.48498)"
      style="display:inline">
     <g
        id="g2769"
-       transform="matrix(0.07587978,0,0,0.07587978,57.509,57.573695)">
+       transform="matrix(0.07587978,0,0,0.07587978,57.509,55.040514)">
       <ellipse
          style="fill:#000000;fill-opacity:1;stroke-width:0.264583"
          id="path2744"
@@ -99,10 +100,10 @@
       </g>
     </g>
     <rect
-       style="fill:#000000;stroke-width:0.0167107"
+       style="fill:#000000;stroke-width:0.0135662"
        id="rect2740"
        width="1.7473407"
-       height="7.1264577"
+       height="4.6967897"
        x="63.22348"
        y="61.179108" />
     <circle
@@ -115,7 +116,7 @@
        style="fill:#000000;fill-opacity:1;stroke-width:0.00717048"
        id="ellipse2756"
        cx="64.092567"
-       cy="68.237373"
+       cy="65.704185"
        rx="1.1002274"
        ry="0.33977836" />
   </g>
