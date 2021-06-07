@@ -1,6 +1,6 @@
 # enjoy for RetroArch
 
-Play any game ROM with associated emulator in *RetroArch*
+Play any game ROM with associated emulator in *RetroArch* on Linux
 
 - **Author**: Tuncay D.
 - **License**: [MIT License](LICENSE)
@@ -38,27 +38,20 @@ $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
 
 1. Install and setup *RetroArch* first, if not done already:
    [RetroArch](https://www.retroarch.com/)
-2. Download **enjoy**:
-   [Releases](https://github.com/thingsiplay/enjoy/releases)
+2. Download **enjoy** from
+   [Releases](https://github.com/thingsiplay/enjoy/releases) and unpack it.
 3. Optionally, install it in a directory within *$PATH*.  The default
    *"install.sh"* script that comes with the downloadable distribution archive
-   does it.
+   does it.  Read a more detailed description about the installation process in
+   the Wiki:
+   [Installation](https://github.com/thingsiplay/enjoy/wiki/Installation)
 4. Execute `enjoy --open-config` to open the default configuration file or
-   create one at *"~/.config/enjoy/default.ini"*.  You have to setup first,
-   explained in [User Configuration File](#user_configuration_file).
-5. Optionally, register the specific ROM file extensions (in example *".smc"*)
-   to this program.
+   create one at "~/.config/enjoy/default.ini" if it does not exist.  Read more
+   about the configuration at
+   [User Configuration File](User-Configuration-File).
+5. Optionally, register **enjoy** as the default program to the specific ROM
+   file extensions (in example *".smc"*).
 6. Enjoy.
-
-## Installation
-
-Read a more detailed description about the installation in the Wiki:
-[Installation](https://github.com/thingsiplay/enjoy/wiki/Installation)
-
-Download and unpack the binary from [Releases](https://github.com/thingsiplay/enjoy/releases)
-Use provided "install.sh" script is optional and will copy the binary to the
-user binaries folder.  Alongside it an example configuration file is copied to
-"~/.config/enjoy/default.ini".
 
 ## User Configuration File
 
@@ -86,21 +79,21 @@ core = psx
 
 There are 4 different categories of sections.
 
-- `[options]` - Main Options:  These are the same options found in the
+- `[options]` - *Main Options*:  These are the same options found in the
   commandline interface of the program.  Use `enjoy -h` for short overview or
   `enjoy --help` for a longer description of all possible options.
-- `[cores]` - Core Rules:  Custom alias to any "libretro" core from
+- `[cores]` - *Core Rules*:  Custom alias to any "libretro" core from
   "RetroArch".  On the left side is the name of the core and on the right side
   the path or filename of an emulator core.  If the filename has no directory
   part, then it will be searched in the "libretro-directory".  The part
   "_libretro.so" in the filename part is optional.
-- `[.ext1 .ext2]` - Extension Rules:  When a game ROM is loaded up, it's
+- `[.ext1 .ext2]` - *Extension Rules*:  When a game ROM is loaded up, it's
   extension is compared if one of these matches.  Each extension rule consists
   of a single or a group of space separated extensions.  Each has to start with
   a dot in their section names.  Their rules can include a `core` rule, which
   will be looked up at section `[cores]`.  Or it can directly have `libretro`
   rule, which is a path to an emulator.
-- `[/path/to/directory]` - Directory Rules:  Any section with a slash in the
+- `[/path/to/directory]` - *Directory Rules*:  Any section with a slash in the
   name is a directory rule.  In this case the folder in which the loaded up
   game ROM is compared, instead it's extension.  If the game is in one of these
   folders, then these rules kick in.  These are the same `core` and `libretro`
