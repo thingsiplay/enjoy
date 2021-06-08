@@ -300,13 +300,13 @@ impl Settings {
     /// the same options found in the programs commandlline arguments (use `enjoy --help` to find
     /// out more).  There are only a couple of differences to it:
     ///
-    ///     - There is only one `game` entry instead of a list.
-    ///     - Some options about the configuration file itself are not present here, because they
-    ///     are evaluated before loading the INI: `--config`, `--open-config` or `--noconfig`.
-    ///     - Flags in the commandline can be used here with a value of `1` or `true` to indicate
-    ///     they are active.  This is needed, because each key or option in the INI file has a
-    ///     value, which is not the case on the commandline.  An example would be `--norun`, which
-    ///     is then translated into INI key `norun = 1`.
+    /// 1. There is only one `game` entry instead of a list.
+    /// 2. Some options about the configuration file itself are not present here, because they are
+    ///    evaluated before loading the INI: `--config`, `--open-config` or `--noconfig`.
+    /// 3. Flags in the commandline can be used here with a value of `1` or `true` to indicate they
+    ///    are active.  This is needed, because each key or option in the INI file has a value,
+    ///    which is not the case on the commandline.  An example would be `--norun`, which is then
+    ///    translated into INI key `norun = 1`.
     ///
     /// ```ini
     /// [options]
