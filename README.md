@@ -13,12 +13,12 @@ Play any game ROM with associated emulator in *RetroArch* on Linux
 
 ## Introduction
 
-**enjoy** is a wrapper around *RetroArch* on Linux to help running emulator
-cores through the commandline.  This functionality can be used to configure
-your system to launch games from *RetroArch* directly within your file manager
-by (double) clicking the ROM files too.  The main magic comes from a user
-configuration file with rules and aliases to extensions and emulator core
-names.
+**enjoy** is a wrapper around "RetroArch" on Linux to help running emulator
+cores on the commandline.  A user configuration file can be setup, including
+rules and aliases to file extensions and emulator paths.  Each time the program
+runs, it will lookup these settings to determine the correct core for each
+given extension.  It can be even used to launch games directly within your
+favorite file manager by double clicking the ROM file.
 
 ### Example
 
@@ -59,8 +59,7 @@ Read a more detailed description about the file in the Wiki:
 [User Configuration File](https://github.com/thingsiplay/enjoy/wiki/User-Configuration-File)
 
 The default configuration file at "~/.config/enjoy/default.ini" will be
-automatically loaded up each time `enjoy` is executed.  It is in an easy to
-understand and editable INI format.  Here a quick overview:
+automatically loaded up each time `enjoy` is executed.  Example:
 
 ```ini
 [options]
@@ -99,15 +98,17 @@ There are 4 different categories of sections.
   folders, then these rules kick in.  These are the same `core` and `libretro`
   rules.
 
-Directory Rules should be used sparingly.
+Directory Rules should be used sparingly, because a each time the program runs,
+all directories are checked.
 
 ## Known Bugs, Limitations and Quirks
 
-- Some options from `retroarch` itself  are not supported yet.
-- When executing the emulator command, the GUI of RetroArch is still loaded up
-  and will not close automatically.  It is recommnded to use 2 times `ESC` to
-  end the play session, if the GUI is not needed.
+- A few options from `retroarch` main program are not supported yet.  As a
+  workaround arguments can be directly passed over to `retroarch` itself, by
+  specifying the `--` on commandline or `retroarch_arguments =` in
+  configuration file.
+- The GUI will still be loaded up each time an emulator is run with
+  "RetroArch".  It is recommended to use 2 times `ESC`-key in a row to quickly
+  end the current play session and closing the background GUI.
 - The Flatpak or Snap version of *"RetroArch"* might not work with this
   program.
-
-
