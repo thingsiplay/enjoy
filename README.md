@@ -28,7 +28,7 @@ $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
 
 ### Features
 
-- run *RetroArch* games directly from your console or file manager
+- run *RetroArch* games directly from your terminal or file manager
 - combine it with other programs output like `grep`, `ls` or `dmenu` to play a
   game from a list of ROM files
 - fast startup
