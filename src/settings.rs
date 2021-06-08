@@ -17,10 +17,10 @@ use configparser::ini;
 use structopt::StructOpt;
 use wildmatch::WildMatch;
 
-/// The final `process::Command` to execute, bundled together with related information for quick
-/// access.  Those related path informations must be set manually when building the `cmdline`.
-/// They point to the arguments used in the command, such as the path to a `game`.  The `output`
-/// must be set manually after executing the `cmdline` process.
+/// The final `process::Command` to execute and run `retroarch`.  It bundles related information
+/// such as paths and the `output` from stdout.  The additional path data should be manually set
+/// when building the main `cmdline`, to stay in sync.  The `output` must be set manually after
+/// executing `cmdline` process.
 #[derive(Debug)]
 pub struct RunCommand {
     pub cmdline: Command,
@@ -965,6 +965,7 @@ mod tests {
             "
             [options]
             retroarch = /usr/bin/retroarch
+            retroarch_arguments = --verbose --set-shader \"\"
             which = 0
             norun = true
             libretro_directory=
@@ -1017,6 +1018,26 @@ mod tests {
         );
 
         cores_rules
+    }
+
+    #[test]
+    fn read_config_options_retroarch_arguments() -> Result<(), Box<dyn Error>>
+    {
+        let mut settings = super::Settings::new();
+        let ini = test_ini_template();
+
+        super::Settings::read_config_options(
+            &mut settings,
+            &ini,
+            &["options".to_string()],
+        )?;
+
+        assert_eq!(
+            vec!["--verbose", "--set-shader", ""],
+            settings.retroarch_arguments
+        );
+
+        Ok(())
     }
 
     #[test]
