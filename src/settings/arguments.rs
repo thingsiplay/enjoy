@@ -30,6 +30,17 @@ pub(crate) struct Opt {
     #[structopt(parse(from_os_str))]
     pub(crate) games: Vec<PathBuf>,
 
+    /// Bypass additional arguments to `retroarch`
+    ///
+    /// Everything after a standalone double dash `--` is redirected to `retroarch` without
+    /// interpreting the arguments.  This can be used for options that are unsupported or not
+    /// implemented in `enjoy` yet.  They are and not expanded or error checked and the user has to
+    /// ensure correctness.
+    ///
+    /// Example: "-- --set-shader ''"
+    #[structopt(last = true)]
+    pub(crate) retroarch_arguments: Vec<String>,
+
     /// Path to the user settings
     ///
     /// This programs own configuration file in INI format.  It contains all user defined rules to

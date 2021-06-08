@@ -36,6 +36,7 @@ pub struct RunCommand {
 #[derive(Debug)]
 pub struct Settings {
     games: Vec<PathBuf>,
+    retroarch_arguments: Vec<String>,
     config: Option<PathBuf>,
     retroarch: Option<PathBuf>,
     retroarch_config: Option<PathBuf>,
@@ -66,6 +67,7 @@ impl Settings {
     pub fn new() -> Settings {
         Settings {
             games: vec![],
+            retroarch_arguments: vec![],
             config: None,
             retroarch: None,
             retroarch_config: None,
@@ -127,6 +129,7 @@ impl Settings {
         // list
         // Take it, as it is always a list.
         settings.games = args.games;
+        settings.retroarch_arguments = args.retroarch_arguments;
 
         // Option
         // Take them, as they are optional anyway.
@@ -318,6 +321,10 @@ impl Settings {
             if let Some(value) = ini.get("options", "game") {
                 settings.games.push(PathBuf::from(value));
             }
+            if let Some(value) = ini.get("options", "retroarch_arguments") {
+                settings.retroarch_arguments =
+                    shlex::split(&value).unwrap_or_default();
+            }
             if let Some(value) = ini.get("options", "retroarch") {
                 settings.retroarch = Some(PathBuf::from(value));
             }
@@ -500,6 +507,15 @@ impl Settings {
             }
         }
 
+        if !overwrite.retroarch_arguments.is_empty() {
+            if self.retroarch_arguments.is_empty() {
+                self.retroarch_arguments = overwrite.retroarch_arguments;
+            } else {
+                self.retroarch_arguments
+                    .append(&mut overwrite.retroarch_arguments.clone());
+            }
+        }
+
         if overwrite.config.is_some() {
             self.config = overwrite.config;
         }
@@ -666,6 +682,11 @@ impl Settings {
         // `--fullscreen`
         if self.fullscreen.unwrap_or(false) {
             command.arg("--fullscreen");
+        }
+
+        // `--`
+        if !self.retroarch_arguments.is_empty() {
+            command.args(self.retroarch_arguments.iter());
         }
 
         // Use `run.cmdline` to get the full command with all options to be executed.  `output`
@@ -862,6 +883,7 @@ mod tests {
     fn new_from_defaults_retroarch() -> Result<(), Box<dyn Error>> {
         let settings = super::Settings {
             games: vec![],
+            retroarch_arguments: vec![],
             config: None,
             retroarch: Some(PathBuf::from("retroarch")),
             retroarch_config: None,
@@ -1092,6 +1114,7 @@ mod tests {
         let mut old = super::Settings::new();
         let new = super::Settings {
             games: vec![],
+            retroarch_arguments: vec![],
             config: None,
             retroarch: Some(PathBuf::from("retroarch")),
             retroarch_config: None,
@@ -1132,6 +1155,7 @@ mod tests {
                 .collect();
         let mut settings = super::Settings {
             games: games,
+            retroarch_arguments: vec![],
             config: None,
             retroarch: Some(PathBuf::from("retroarch")),
             retroarch_config: None,
