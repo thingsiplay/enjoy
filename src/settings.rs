@@ -7,15 +7,17 @@ use arguments::Opt;
 
 use std::collections::HashMap;
 use std::collections::HashSet;
-use std::error::Error;
 use std::path::Path;
 use std::path::PathBuf;
 use std::process::Command;
 use std::process::Output;
 
+use clap::Parser;
 use configparser::ini;
-use structopt::StructOpt;
 use wildmatch::WildMatch;
+
+type Result<T = (), E = Box<dyn std::error::Error>> =
+    std::result::Result<T, E>;
 
 /// The final `process::Command` to execute and run `retroarch`.  It bundles related information
 /// such as paths and the `output` from stdout.  The additional path data should be manually set
@@ -45,6 +47,8 @@ pub struct Settings {
     core: Option<String>,
     filter: Option<String>,
     which: Option<bool>,
+    which_command: Option<bool>,
+    list_cores: Option<bool>,
     fullscreen: Option<bool>,
     highlander: Option<bool>,
     open_config: Option<bool>,
@@ -76,6 +80,8 @@ impl Settings {
             core: None,
             filter: None,
             which: None,
+            which_command: None,
+            list_cores: None,
             fullscreen: None,
             highlander: None,
             open_config: None,
@@ -90,36 +96,33 @@ impl Settings {
 
     /// Read each line from stdin stream and convert it to paths.  Create a new struct with games
     /// out of it.
-    pub fn new_from_stdin(nostdin: bool) -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_stdin(nostdin: bool) -> Result<Settings> {
         let mut settings: Settings = Settings::new();
 
         if !nostdin {
-            if let Ok(list) = inoutput::list_from_stdin() {
-                settings.games = list.iter().map(PathBuf::from).collect();
-            }
+            let list = inoutput::list_from_stdin()?;
+            settings.games = list.iter().map(PathBuf::from).collect();
         }
 
         Ok(settings)
     }
 
     /// Create a new Settings struct with a few default data.
-    pub fn new_from_defaults() -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_defaults() -> Settings {
         let mut settings: Settings = Settings::new();
 
         settings.retroarch = Some(PathBuf::from("retroarch"));
 
-        Ok(settings)
+        settings
     }
 
     /// Parse own commandline arguments and create a new Settings struct out of it.
-    pub fn new_from_cmdline(
-        options: Option<Vec<String>>,
-    ) -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_cmdline(options: Option<Vec<String>>) -> Settings {
         let mut settings: Settings = Settings::new();
 
         let args: Opt = match options {
-            Some(from) => Opt::from_iter(from.iter()),
-            None => Opt::from_args(),
+            Some(opt) => Opt::from_iter(opt.iter()),
+            None => Opt::parse(),
         };
 
         // default_value
@@ -143,40 +146,46 @@ impl Settings {
         // bool
         // Only set it to `true`, if the option is found in arguments.
         if args.which {
-            settings.which = Some(true)
+            settings.which = Some(true);
+        }
+        if args.which_command {
+            settings.which_command = Some(true);
+        }
+        if args.list_cores {
+            settings.list_cores = Some(true);
         }
         if args.fullscreen {
-            settings.fullscreen = Some(true)
+            settings.fullscreen = Some(true);
         }
         if args.highlander {
-            settings.highlander = Some(true)
+            settings.highlander = Some(true);
         }
         if args.open_config {
-            settings.open_config = Some(true)
+            settings.open_config = Some(true);
         }
         if args.noconfig {
-            settings.noconfig = Some(true)
+            settings.noconfig = Some(true);
         }
         if args.norun {
-            settings.norun = Some(true)
+            settings.norun = Some(true);
         }
         if args.nostdin {
-            settings.nostdin = Some(true)
+            settings.nostdin = Some(true);
         }
 
-        Ok(settings)
+        settings
     }
 
     /// Parse `retroarch.cfg` the own configuration file of `RetroArch` itself and create a new
     /// `Settings` struct out of it.
     pub fn new_from_retroarch_config(
         file: &Option<PathBuf>,
-    ) -> Result<Settings, Box<dyn Error>> {
+    ) -> Result<Settings> {
         let mut settings: Settings = Settings::new();
 
         // If no file was given, then search at `RetroArch` default locations for the file `retroarch.cfg`.
         settings.retroarch_config = match file {
-            Some(p) => file::to_fullpath(&p),
+            Some(p) => file::to_fullpath(p),
             None => retroarch::search_default_config(),
         };
 
@@ -221,9 +230,7 @@ impl Settings {
     /// [.md, .gen]
     /// libretro = genesis_plus_gx
     /// ```
-    pub fn new_from_config(
-        file: &Option<PathBuf>,
-    ) -> Result<Settings, Box<dyn Error>> {
+    pub fn new_from_config(file: &Option<PathBuf>) -> Result<Settings> {
         let mut settings: Settings = Settings::new();
 
         let path: PathBuf = match file {
@@ -236,7 +243,7 @@ impl Settings {
             None => {
                 return Err(format!(
                     "User config ini file not found: {}",
-                    path.display().to_string()
+                    path.display()
                 )
                 .into());
             }
@@ -316,7 +323,7 @@ impl Settings {
         settings: &mut Settings,
         ini: &ini::Ini,
         section_names: &[String],
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> Result<()> {
         if section_names.contains(&String::from("options")) {
             if let Some(value) = ini.get("options", "game") {
                 settings.games.push(PathBuf::from(value));
@@ -345,6 +352,14 @@ impl Settings {
             }
             if let Some(value) = ini.getboolcoerce("options", "which")? {
                 settings.which = Some(value);
+            }
+            if let Some(value) =
+                ini.getboolcoerce("options", "which_command")?
+            {
+                settings.which = Some(value);
+            }
+            if let Some(value) = ini.getboolcoerce("options", "list_cores")? {
+                settings.list_cores = Some(value);
             }
             if let Some(value) = ini.getboolcoerce("options", "fullscreen")? {
                 settings.fullscreen = Some(value);
@@ -417,13 +432,12 @@ impl Settings {
             {
                 // libretro = snes9x
                 // Take libretro path directly.
-                if let Some(path) = ini.get(&pattern_group, "libretro") {
+                if let Some(path) = ini.get(pattern_group, "libretro") {
                     extension_rules.insert(ext_pattern, PathBuf::from(path));
                 }
                 // core = snes
                 // Lookup matching libretro path from rules.
-                else if let Some(core_alias) =
-                    ini.get(&pattern_group, "core")
+                else if let Some(core_alias) = ini.get(pattern_group, "core")
                 {
                     // [cores]
                     // snes = snes9x
@@ -493,10 +507,7 @@ impl Settings {
     /// Merge current `Settings` with a new one.  Overwrite values only, if the new value is
     /// `Some`. The `games` key is different, as the new list in `games` will be prepended to
     /// current existing list.
-    pub fn update_from(
-        &mut self,
-        overwrite: Settings,
-    ) -> Result<(), Box<dyn Error>> {
+    pub fn update_from(&mut self, overwrite: Settings) {
         if !overwrite.games.is_empty() {
             if self.games.is_empty() {
                 self.games = overwrite.games;
@@ -540,6 +551,12 @@ impl Settings {
         if overwrite.which.is_some() {
             self.which = overwrite.which;
         }
+        if overwrite.which_command.is_some() {
+            self.which_command = overwrite.which_command;
+        }
+        if overwrite.list_cores.is_some() {
+            self.list_cores = overwrite.list_cores;
+        }
         if overwrite.fullscreen.is_some() {
             self.fullscreen = overwrite.fullscreen;
         }
@@ -570,17 +587,12 @@ impl Settings {
         if overwrite.directory_rules.is_some() {
             self.directory_rules = overwrite.directory_rules;
         }
-
-        Ok(())
     }
 
     /// Update current Settings from new Settings.  Replace the content only, if the old value is
     /// `None`.  Only a few keys are affected, currently `retroarch`, `retroarch_config`,
     /// `libretro` and `libretro_directory`.
-    pub fn update_defaults_from(
-        &mut self,
-        overwrite: Settings,
-    ) -> Result<(), Box<dyn Error>> {
+    pub fn update_defaults_from(&mut self, overwrite: Settings) {
         if self.retroarch.is_none() {
             self.retroarch = overwrite.retroarch;
         }
@@ -593,8 +605,6 @@ impl Settings {
         if self.libretro_directory.is_none() {
             self.libretro_directory = overwrite.libretro_directory;
         }
-
-        Ok(())
     }
 
     /// Build up the final `RetroArch` run command from the current Settings.  This is the command
@@ -607,13 +617,24 @@ impl Settings {
             Command::new(&file::to_str(self.retroarch.as_ref()));
 
         // `game`
+        // Get first entry of all games in the list, make it a full path and check if file exists.
         let game: Option<PathBuf> = match self.select_game() {
-            Some(selected) => file::to_fullpath(&selected),
+            Some(selected) => {
+                let path = file::to_fullpath(&selected);
+                match path {
+                    Some(ref p) => command.arg(p),
+                    None => {
+                        let message = format!(
+                            "game file not found: {}",
+                            selected.display()
+                        );
+                        return Err(message);
+                    }
+                };
+
+                path
+            }
             None => return Err("No matching game available".into()),
-        };
-        match &game {
-            Some(path) => command.arg(path),
-            None => return Err("game file not found.".into()),
         };
 
         // `--libretro`
@@ -635,7 +656,7 @@ impl Settings {
             // Lookup and resolve from `[/directory]` rules
             if libretro.is_none() && self.directory_rules.is_some() {
                 libretro = self.libretro_from_dir(
-                    &game
+                    game
                         .as_ref()
                         .expect("game required when building libretro path from directory rules."),
                 );
@@ -643,7 +664,7 @@ impl Settings {
             // Lookup and resolve from `[.ext]` rules
             if libretro.is_none() && self.extension_rules.is_some() {
                 libretro = self.libretro_from_ext(
-                    &game
+                    game
                         .as_ref()
                         .expect("game required when building libretro path from extension rules."),
                 );
@@ -699,6 +720,31 @@ impl Settings {
         };
 
         Ok(run)
+    }
+
+    /// Find core matching the libretro to list of cores.
+    pub fn find_core_match(&self, libretro: &Path) -> Vec<String> {
+        let mut core_match: Vec<String> = vec![];
+
+        if let Some(rules) = &self.cores_rules {
+            let libretro_string = libretro
+                .to_path_buf()
+                .file_stem()
+                .unwrap()
+                .to_string_lossy()
+                .to_string();
+            for (core, path) in rules {
+                let path_string =
+                    path.file_stem().unwrap().to_string_lossy().to_string();
+                if path_string.trim_end_matches("_libretro")
+                    == libretro_string.trim_end_matches("_libretro")
+                {
+                    core_match.push(core.to_string());
+                }
+            }
+        }
+
+        core_match
     }
 
     /// Extract extension from game path and lookup the corresponding extension rule in current
@@ -766,14 +812,20 @@ impl Settings {
     }
 
     /// Opens the current `config` file with the associated default application.
-    pub fn open_config(&self) -> Result<bool, Box<dyn Error>> {
+    pub fn open_config(&self) -> Result<bool> {
         if self.open_config.unwrap_or(false) {
             let config_path: &PathBuf = self
                 .config
                 .as_ref()
                 .expect("Path to config ini file required.");
 
-            file::open_with_default(config_path)?;
+            match file::to_fullpath(config_path) {
+                Some(ref path) => {
+                    println!("{}", path.display());
+                    file::open_with_default(path)?;
+                }
+                None => (),
+            }
 
             return Ok(true);
         }
@@ -828,6 +880,27 @@ impl Settings {
         }
     }
 
+    /// Check if option to print entire command is set.
+    pub fn is_which_command(&self) -> bool {
+        self.which_command.unwrap_or(false)
+    }
+
+    /// Check if option to print cores is set.
+    pub fn is_list_cores(&self) -> bool {
+        self.list_cores.unwrap_or(false)
+    }
+
+    /// Print all name of cores defined in the section [cores] in the config file.
+    pub fn print_cores(&self) {
+        if let Some(rules) = self.cores_rules.as_ref() {
+            let mut keys: Vec<String> = rules.clone().into_keys().collect();
+            keys.sort_unstable();
+            for core in keys {
+                println!("{core}");
+            }
+        }
+    }
+
     /// Check if an instance of `RetroArch` is already running, if the single instance mode
     /// `highlander` is active.  Otherwise its always `false`.
     #[must_use]
@@ -844,8 +917,9 @@ impl Settings {
         } else {
             let output: Output =
                 command.output().expect("Error! Could not run RetroArch.");
-            if output.status.to_string() != *"exit code: 0" {
-                eprintln!("Could not run RetroArch. {}", output.status)
+            // if output.status.to_string() != *"exit code: 0" {
+            if output.status.to_string() != *"exit status: 0" {
+                eprintln!("Could not run RetroArch. {}", output.status);
             }
 
             Some(output)
@@ -857,10 +931,12 @@ impl Settings {
 mod tests {
 
     use std::collections::HashMap;
-    use std::error::Error;
     use std::path::PathBuf;
 
     use configparser::ini;
+
+    type Result<T = (), E = Box<dyn std::error::Error>> =
+        std::result::Result<T, E>;
 
     // Untested:
     //  - Settings::new_from_stdin()
@@ -876,11 +952,14 @@ mod tests {
     //  - Settings::is_game_available()
     //  - Settings::is_nostdin()
     //  - Settings::print_which()
+    //  - Settings::is_which_command()
+    //  - Settings::list_cores()
+    //  - Settings::print_cores()
     //  - Settings::there_can_only_be_one()
     //  - Settings::run()
 
     #[test]
-    fn new_from_defaults_retroarch() -> Result<(), Box<dyn Error>> {
+    fn new_from_defaults_retroarch() -> Result<()> {
         let settings = super::Settings {
             games: vec![],
             retroarch_arguments: vec![],
@@ -892,6 +971,8 @@ mod tests {
             core: None,
             filter: None,
             which: None,
+            which_command: None,
+            list_cores: None,
             fullscreen: None,
             highlander: None,
             open_config: None,
@@ -903,7 +984,7 @@ mod tests {
             directory_rules: None,
         };
 
-        let defaults = super::Settings::new_from_defaults()?;
+        let defaults = super::Settings::new_from_defaults();
 
         assert_eq!(settings.retroarch, defaults.retroarch);
 
@@ -911,13 +992,13 @@ mod tests {
     }
 
     #[test]
-    fn new_from_cmdline_default_config() -> Result<(), Box<dyn Error>> {
+    fn new_from_cmdline_default_config() -> Result<()> {
         let mut options: Vec<String> = vec![];
         options.push("enjoy".to_string());
 
         let test_config = Some(PathBuf::from("~/.config/enjoy/default.ini"));
 
-        let args = super::Settings::new_from_cmdline(Some(options))?;
+        let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(test_config, args.config);
         assert_eq!(None, args.norun);
@@ -926,15 +1007,14 @@ mod tests {
     }
 
     #[test]
-    fn new_from_cmdline_emptygame_then_retroarch() -> Result<(), Box<dyn Error>>
-    {
+    fn new_from_cmdline_emptygame_then_retroarch() -> Result<()> {
         let mut options: Vec<String> = vec![];
         options.push("enjoy".to_string());
         options.push("".to_string());
         options.push("--retroarch".to_string());
         options.push("/usr/bin/retroarch".to_string());
 
-        let args = super::Settings::new_from_cmdline(Some(options))?;
+        let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(Some(PathBuf::from("/usr/bin/retroarch")), args.retroarch);
         assert_eq!(vec![PathBuf::from("")], args.games);
@@ -943,7 +1023,7 @@ mod tests {
     }
 
     #[test]
-    fn new_from_cmdline_game() -> Result<(), Box<dyn Error>> {
+    fn new_from_cmdline_game() -> Result<()> {
         let mut options: Vec<String> = vec![];
         options.push("enjoy".to_string());
         options.push("mario.smc".to_string());
@@ -953,7 +1033,7 @@ mod tests {
         test_games.push(PathBuf::from("mario.smc"));
         test_games.push(PathBuf::from(""));
 
-        let args = super::Settings::new_from_cmdline(Some(options))?;
+        let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(test_games, args.games);
 
@@ -1021,8 +1101,7 @@ mod tests {
     }
 
     #[test]
-    fn read_config_options_retroarch_arguments() -> Result<(), Box<dyn Error>>
-    {
+    fn read_config_options_retroarch_arguments() -> Result<()> {
         let mut settings = super::Settings::new();
         let ini = test_ini_template();
 
@@ -1041,7 +1120,7 @@ mod tests {
     }
 
     #[test]
-    fn read_config_options_path() -> Result<(), Box<dyn Error>> {
+    fn read_config_options_path() -> Result<()> {
         let mut settings = super::Settings::new();
         let ini = test_ini_template();
 
@@ -1062,7 +1141,7 @@ mod tests {
     }
 
     #[test]
-    fn read_config_options_bool() -> Result<(), Box<dyn Error>> {
+    fn read_config_options_bool() -> Result<()> {
         let mut settings = super::Settings::new();
         let ini = test_ini_template();
 
@@ -1079,7 +1158,7 @@ mod tests {
     }
 
     #[test]
-    fn read_config_cores_rules() -> Result<(), Box<dyn Error>> {
+    fn read_config_cores_rules() -> Result<()> {
         let ini = test_ini_template();
 
         let rules = super::Settings::read_config_cores_rules(&ini);
@@ -1131,7 +1210,7 @@ mod tests {
     }
 
     #[test]
-    fn update_from() -> Result<(), Box<dyn Error>> {
+    fn update_from() -> Result<()> {
         let mut old = super::Settings::new();
         let new = super::Settings {
             games: vec![],
@@ -1144,6 +1223,8 @@ mod tests {
             core: None,
             filter: Some("[!]".to_string()),
             which: None,
+            which_command: None,
+            list_cores: None,
             fullscreen: None,
             highlander: Some(true),
             open_config: None,
@@ -1155,7 +1236,7 @@ mod tests {
             directory_rules: None,
         };
 
-        old.update_from(new)?;
+        old.update_from(new);
         let updated = old;
 
         assert_eq!(Some(PathBuf::from("retroarch")), updated.retroarch);
@@ -1185,6 +1266,8 @@ mod tests {
             core: None,
             filter: None,
             which: None,
+            which_command: None,
+            list_cores: None,
             fullscreen: None,
             highlander: None,
             open_config: None,

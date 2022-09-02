@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use structopt::StructOpt;
+use clap::Parser;
 
 /// Play any game ROM with associated emulator in `"RetroArch"`.
 ///
@@ -15,9 +15,13 @@ use structopt::StructOpt;
 ///
 /// $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
 ///
+/// $ enjoy 'Super Mario World (U) [!].smc' -w
+///
 /// $ ls -1 ./snes/* | enjoy --filter '[!]' --core snes --which --highlander
+///
+/// $ ls -1 $(readlink -f ~/roms/gb)/* | enjoy -xWn
 #[allow(clippy::struct_excessive_bools)]
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub(crate) struct Opt {
     /// Path to ROM file
     ///
@@ -27,7 +31,7 @@ pub(crate) struct Opt {
     /// and expanded.
     ///
     /// Example: "~/roms/snes/Super Mario World (U) [\!].smc"
-    #[structopt(parse(from_os_str))]
+    #[clap(parse(from_os_str))]
     pub(crate) games: Vec<PathBuf>,
 
     /// Bypass additional arguments to `retroarch`
@@ -38,7 +42,7 @@ pub(crate) struct Opt {
     /// ensure correctness.
     ///
     /// Example: "-- --set-shader ''"
-    #[structopt(last = true)]
+    #[clap(last = true)]
     pub(crate) retroarch_arguments: Vec<String>,
 
     /// Path to the user settings
@@ -48,8 +52,8 @@ pub(crate) struct Opt {
     /// higher priority over the individual settings in this file.
     ///
     /// Example: "/home/user/.config/enjoy/alternative.ini"
-    #[structopt(
-        short = "c",
+    #[clap(
+        short = 'c',
         long,
         parse(from_os_str),
         value_name = "FILE",
@@ -64,8 +68,8 @@ pub(crate) struct Opt {
     /// filename without directory part, then the systems `$PATH` is searched.
     ///
     /// Example: "/usr/bin/retroarch" [default: retroarch]
-    #[structopt(
-        short = "A",
+    #[clap(
+        short = 'A',
         long,
         parse(from_os_str),
         value_name = "APP",
@@ -81,8 +85,8 @@ pub(crate) struct Opt {
     /// `$HOME/.config/retroarch/retroarch.cfg`, `$HOME/.retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/retroarch.cfg"
-    #[structopt(
-        short = "B",
+    #[clap(
+        short = 'B',
         long,
         parse(from_os_str),
         value_name = "FILE",
@@ -100,8 +104,8 @@ pub(crate) struct Opt {
     /// `/home/user/.config/retroarch/cores/snes9x_libretro.so`.
     ///
     /// Example: "snes9x"
-    #[structopt(
-        short = "L",
+    #[clap(
+        short = 'L',
         long,
         parse(from_os_str),
         value_name = "FILE",
@@ -117,8 +121,8 @@ pub(crate) struct Opt {
     /// configuration file `retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/cores"
-    #[structopt(
-        short = "D",
+    #[clap(
+        short = 'D',
         long,
         parse(from_os_str),
         value_name = "DIR",
@@ -133,7 +137,7 @@ pub(crate) struct Opt {
     /// `[cores]` as `alias=libretro_path`.
     ///
     /// Example: "snes"
-    #[structopt(short = "C", long, value_name = "ALIAS", display_order = 3)]
+    #[clap(short = 'C', long, value_name = "ALIAS", display_order = 3)]
     pub(crate) core: Option<String>,
 
     /// Apply simple wildcard to filter list of games
@@ -146,32 +150,47 @@ pub(crate) struct Opt {
     /// useful if more than one game entry is given to the program.
     ///
     /// Example: "mario*[\!]"
-    #[structopt(short = "f", long, value_name = "PATTERN", display_order = 2)]
+    #[clap(short = 'f', long, value_name = "PATTERN", display_order = 2)]
     pub(crate) filter: Option<String>,
 
     /// Print selected game ROM
     ///
     /// Writes the full filepath of the selected game to stdout.
-    #[structopt(short = "w", long, display_order = 1)]
+    #[clap(short = 'w', long, display_order = 1)]
     pub(crate) which: bool,
+
+    /// Print RetroArch commandline
+    ///
+    /// Writes full command with all arguments used to run RetroArch to stdout. Has higher priority
+    /// than option --which.
+    #[clap(short = 'W', long, display_order = 1)]
+    pub(crate) which_command: bool,
+
+    /// Print all core names
+    ///
+    /// Lists all core names on the left side of the user configuration under section "[cores]".
+    /// Will output matching cores to the libretro core that would be used with the game.  Without
+    /// a game, all cores are listed.
+    #[clap(short = 'n', long, display_order = 2)]
+    pub(crate) list_cores: bool,
 
     /// Force fullscreen mode
     ///
     /// Runs the emulator and `RetroArch` UI in fullscreen, regardless of any other setting.
-    #[structopt(short = "F", long, display_order = 2)]
+    #[clap(short = 'F', long, display_order = 2)]
     pub(crate) fullscreen: bool,
 
     /// There Can Only Be One!
     ///
     /// Prevents running another `retroarch` process, if one is already active.  In this case the
     /// final command of the emulator will not execute.
-    #[structopt(short = "1", long, display_order = 2)]
+    #[clap(short = '1', long, display_order = 2)]
     pub(crate) highlander: bool,
 
     /// Show user settings
     ///
     /// Opens the user config INI file with it's associated default application.
-    #[structopt(short = "o", long, display_order = 3)]
+    #[clap(short = 'o', long, display_order = 3)]
     pub(crate) open_config: bool,
 
     /// Ignore user settings
@@ -179,8 +198,8 @@ pub(crate) struct Opt {
     /// The config INI file of this program will be ignored and not loaded up.  The entire
     /// application relies on commandline options and environmental variables.  Therefore any
     /// predefined rules and aliases from that file are ignored.
-    #[structopt(
-        short = "i",
+    #[clap(
+        short = 'i',
         long,
         display_order = 4,
         conflicts_with_all = &["config", "open-config", "core"]
@@ -191,7 +210,7 @@ pub(crate) struct Opt {
     ///
     /// The `retroarch` run command to play ROMs will not be executed.  Internally the process is
     /// still simulated, up until to the point of running the emulator.
-    #[structopt(short = "x", long, display_order = 4)]
+    #[clap(short = 'x', long, display_order = 4)]
     pub(crate) norun: bool,
 
     /// Dismiss reading from stdin
@@ -199,6 +218,6 @@ pub(crate) struct Opt {
     /// Ignores the `stdin` and do not test or read any data from it.  Normally the program will
     /// look and read all lines from `stdin` as additional game entries.  This option will disable
     /// that.
-    #[structopt(short = "z", long, display_order = 4)]
+    #[clap(short = 'z', long, display_order = 4)]
     pub(crate) nostdin: bool,
 }

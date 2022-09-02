@@ -20,11 +20,20 @@ runs, it will lookup these settings to determine the correct core for each
 given extension.  It can be even used to launch games directly within your
 favorite file manager by double clicking the ROM file.
 
+Use option `-h` for short help and `--help` for detailed help.
+
 ### Example
 
 ```bash
 $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
+
+$ ls -1 $(readlink -f ~/Emulatoren/games/gb)/* | enjoy --filter 'mario' -xWn
 ```
+
+Depending on your shell, you might need to escape the `!` in example. When
+multiple ROMs are given, then the first one will be loaded. There are many
+options available, including filtering such a game list or output the entire
+command to run RetroArch.
 
 ### Features
 

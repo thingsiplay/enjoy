@@ -3,7 +3,7 @@ SHELL = /bin/bash
 # Will strip strings from distribution binary.
 # 0=disable
 # 1=enable
-STRIP_DIST_BIN:=1
+STRIP_DIST_BIN:=0
 
 # Will compress distribution binary.
 # 0=disable
@@ -15,9 +15,9 @@ COMPRESS_DIST_BIN:=0
 # 1=enable
 BUILD_DEBUG:=1
 
-APP_NAME=$(shell grep -E 'name\s*=' Cargo.toml | grep -o '".*"' | tr -d '"')
+APP_NAME=$(shell grep -E '^\s*name\s*=' Cargo.toml | grep -o '".*"' | tr -d '"')
 APP_DEBUG_NAME=$(APP_NAME)d
-APP_VERSION=$(shell grep -E 'version\s*=' Cargo.toml | grep -o '".*"' | tr -d '"')
+APP_VERSION=$(shell grep -E '^\s*version\s*=' Cargo.toml | grep -o '".*"' | tr -d '"')
 
 PACKAGE_SRC_DIR:=./build
 PACKAGE_DEST_DIR:=./dist
@@ -30,7 +30,8 @@ CLIPPY_FLAGS:=-D warnings
 CLIPPY_PEDANTIC_FLAGS:=-W clippy::pedantic
 BUILD_RELEASE_FLAGS:=
 BUILD_DEBUG_FLAGS:=
-DOC_FLAGS:=--open
+# DOC_FLAGS:=--open
+DOC_FLAGS:=
 
 .DEFAULT_GOAL := default
 

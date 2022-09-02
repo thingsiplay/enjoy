@@ -14,7 +14,7 @@ pub(crate) fn open_with_default(file: &Path) -> Result<(), Box<dyn Error>> {
     } else {
         return Err(format!(
             "Path to config is not accessible or a file: {}",
-            fullpath.display().to_string()
+            fullpath.display()
         )
         .into());
     }

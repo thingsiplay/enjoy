@@ -1,6 +1,6 @@
 [package]
 name = "enjoy"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Tuncay D <mamehiscore@aol.com>"]
 description = "Play any game rom with associated emulator in RetroArch"
 readme = "README.md"
@@ -8,21 +8,22 @@ repository = "https://github.com/thingsiplay/enjoy/"
 license-file = "LICENSE"
 keywords = ["retroarch", "libretro", "emulation", "run", "launcher"]
 categories = ["command-line-utilities", "emulators"]
-edition = "2018"
+edition = "2021"
 resolver = "2"
 publish = false
 
 [dependencies]
-configparser = "2.0.1"
-structopt = "0.3.21"
-atty = "0.2.14"
-shellexpand = "2.1.0"
-wildmatch = "2.1.0"
-open = "1.7.0"
-shlex = "1.0.0"
+configparser = "3.0"
+clap = {version = "3.2", features = ["derive"]}
+atty = "0.2"
+shellexpand = "2.1"
+wildmatch = "2.1"
+open = "3.0"
+shlex = "1.1"
 
 [profile.release]
 opt-level = "z"
 codegen-units = 1
 lto = true
 panic = "abort"
+strip = "symbols"
