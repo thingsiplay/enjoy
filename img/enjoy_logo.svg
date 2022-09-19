@@ -1,163 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   id="svg8"
-   version="1.1"
-   viewBox="0 0 135.43663 43.858485"
-   height="165.76433"
-   width="511.88647">
-  <defs
-     id="defs2">
-    <rect
-       x="81.803925"
-       y="76.801781"
-       width="33.16024"
-       height="41.75185"
-       id="rect1477" />
-  </defs>
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <rect
-     style="display:none;fill:#000000;stroke:#ffffff;stroke-width:0.458442;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="rect860"
-     width="91.394142"
-     height="73.514465"
-     x="210.84485"
-     y="-62.363567" />
-  <text
-     xml:space="preserve"
-     style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;line-height:1.25;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:none;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     x="215.18022"
-     y="-22.296217"
-     id="text841"><tspan
-       id="tspan839"
-       x="215.18022"
-       y="-22.296217"
-       style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:27.3056px;font-family:'SauceCodePro Nerd Font Mono';-inkscape-font-specification:'SauceCodePro Nerd Font Mono, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke:#ffffff;stroke-width:0.529167;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Enjoy</tspan></text>
-  <g
-     id="g845"
-     transform="matrix(2.5766817,0,0,2.5766817,35.550825,-190.16624)"
-     style="display:none">
-    <g
-       id="g2769"
-       transform="matrix(0.07587978,0,0,0.07587978,57.509,57.105741)">
-      <ellipse
-         style="fill:#000000;fill-opacity:1;stroke-width:0.264583"
-         id="path2744"
-         cx="86.7631"
-         cy="143.70882"
-         rx="40.597324"
-         ry="12.537492" />
-      <g
-         id="g2764">
-        <ellipse
-           style="fill:#454545;fill-opacity:1;stroke-width:0.264583"
-           id="ellipse2748"
-           cx="86.7631"
-           cy="140.53386"
-           rx="40.597324"
-           ry="12.537492" />
-      </g>
-    </g>
-    <rect
-       style="fill:#000000;stroke-width:0.0160669"
-       id="rect2740"
-       width="1.7473407"
-       height="6.5879288"
-       x="63.22348"
-       y="61.179108" />
-    <circle
-       style="fill:#800000;fill-opacity:1;stroke-width:0.0192672"
-       id="path2742"
-       cx="64.097153"
-       cy="60.578232"
-       r="3.0846546" />
-    <ellipse
-       style="fill:#000000;fill-opacity:1;stroke-width:0.00717048"
-       id="ellipse2756"
-       cx="64.092567"
-       cy="67.769409"
-       rx="1.1002274"
-       ry="0.33977836" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="511.89" height="165.76" version="1.1" viewBox="0 0 135.44 43.858" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <rect width="135.17" height="43.858" rx="0" ry="0" fill="#fff" style="paint-order:fill markers stroke"/>
+ <text transform="scale(1.0394 .96211)" x="23.722717" y="28.289049" fill="#1a1a1a" font-family="'Exo 2'" font-size="29.767px" font-weight="900" stroke-width=".77848" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="23.722717" y="28.289049" fill="#1a1a1a" font-family="'Exo 2'" font-size="29.767px" font-weight="900" stroke-width=".77848" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">enjoy</tspan></text>
+ <rect x="210.84" y="-62.364" width="91.394" height="73.514" display="none" stroke="#fff" stroke-width=".45844"/>
+ <text x="215.18022" y="-22.296217" display="none" fill="#000000" font-family="'SauceCodePro Nerd Font Mono'" font-size="27.306px" font-style="italic" font-weight="900" stroke="#ffffff" stroke-width=".52917" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="215.18022" y="-22.296217" font-family="'SauceCodePro Nerd Font Mono'" font-size="27.306px" font-style="italic" font-weight="900" stroke="#ffffff" stroke-width=".52917" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">Enjoy</tspan></text>
+ <g transform="matrix(2.5767 0 0 2.5767 35.551 -190.17)" display="none">
+  <g transform="matrix(.07588 0 0 .07588 57.509 57.106)">
+   <ellipse cx="86.763" cy="143.71" rx="40.597" ry="12.537" stroke-width=".26458"/>
+   <ellipse cx="86.763" cy="140.53" rx="40.597" ry="12.537" fill="#454545" stroke-width=".26458"/>
   </g>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.7314px;line-height:1.25;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#949494;fill-opacity:1;stroke:none;stroke-width:0.438592"
-     x="-48.440308"
-     y="58.405251"
-     id="text990"
-     transform="matrix(0.00666207,-0.9047605,1.1052788,-0.00189105,0,0)"><tspan
-       x="-48.440308"
-       y="58.405251"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.7314px;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#949494;fill-opacity:1;stroke-width:0.438592"
-       id="tspan1032">en</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.2837px;line-height:1.25;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#a61815;fill-opacity:1;stroke:none;stroke-width:0.778479"
-     x="82.776604"
-     y="33.283699"
-     id="text998"
-     transform="scale(0.75888852,1.3177166)"><tspan
-       x="82.776604"
-       y="33.283699"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.2837px;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a61815;fill-opacity:1;stroke-width:0.778479"
-       id="tspan1000">joy</tspan></text>
-  <g
-     id="g1018"
-     transform="matrix(0.70829362,0,0,0.6417924,-15.091234,-9.2235283)"
-     style="opacity:1">
-    <g
-       id="g1010"
-       transform="matrix(0.49261847,0,0,0.49261847,-1.4356473,5.6931365)">
-      <ellipse
-         style="fill:#000000;fill-opacity:1;stroke-width:0.264583"
-         id="ellipse1004"
-         cx="86.7631"
-         cy="143.70882"
-         rx="40.597324"
-         ry="12.537492" />
-      <g
-         id="g1008"
-         style="fill:#15a69d;fill-opacity:1">
-        <ellipse
-           style="fill:#949494;fill-opacity:1;stroke-width:0.264583"
-           id="ellipse1006"
-           cx="86.7631"
-           cy="140.53386"
-           rx="40.597324"
-           ry="12.537492" />
-      </g>
-    </g>
-    <path
-       id="path1012"
-       style="fill:#000000;stroke-width:0.0876314"
-       d="m 45.637539,45.774373 h 11.3439 L 47.450909,75.28375 H 36.107025 Z" />
-    <circle
-       style="fill:#a61815;fill-opacity:1;stroke-width:0.125085"
-       id="circle1014"
-       cx="54.539787"
-       cy="34.651894"
-       r="20.025862" />
-    <ellipse
-       style="fill:#000000;fill-opacity:1;stroke-width:0.0465513"
-       id="ellipse1016"
-       cx="41.305485"
-       cy="74.922646"
-       rx="7.1427765"
-       ry="2.2058723" />
+  <rect x="63.223" y="61.179" width="1.7473" height="6.5879" stroke-width=".016067"/>
+  <circle cx="64.097" cy="60.578" r="3.0847" fill="#800000" stroke-width=".019267"/>
+  <ellipse cx="64.093" cy="67.769" rx="1.1002" ry=".33978" stroke-width=".0071705"/>
+ </g>
+ <g transform="matrix(.48139 0 0 .43619 54.952 4.6368)" stroke-width="1.4714">
+  <g transform="matrix(.49262 0 0 .49262 -1.4356 5.6931)">
+   <ellipse cx="86.763" cy="143.71" rx="40.597" ry="12.537" stroke-width=".38929"/>
+   <g fill="#fff" stroke-width="1.4714">
+    <ellipse cx="86.763" cy="140.53" rx="40.597" ry="12.537" fill="#fff" stroke-width=".38929"/>
+   </g>
   </g>
+  <path d="m45.638 45.774h11.344l-9.5305 29.509h-11.344z" stroke-width=".12894"/>
+  <circle cx="54.54" cy="34.652" r="20.026" fill="#a61815" stroke-width=".18404"/>
+  <ellipse cx="41.305" cy="74.923" rx="7.1428" ry="2.2059" stroke-width=".068493"/>
+ </g>
+ <text transform="scale(1.4221 .70318)" x="51.110737" y="13.601357" fill="#1a1a1a" font-family="'Exo 2'" font-size="6.3735px" stroke-width=".77849" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;line-height:1.25" xml:space="preserve"><tspan x="51.110737" y="13.601357" fill="#1a1a1a" font-family="'Exo 2'" font-size="6.3735px" stroke-width=".77849" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">play:nice</tspan></text>
 </svg>

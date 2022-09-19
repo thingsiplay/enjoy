@@ -17,8 +17,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let argument_options = Settings::new_from_cmdline(None);
 
-    // If option `open-config` is set, then open the file and exit program.
-    if argument_options.open_config()? {
+    // Exit program after printing fullpath or opening the user settings ini file.
+    if argument_options.print_config() || argument_options.open_config()? {
         return Ok(());
     }
 
@@ -46,15 +46,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Overwrite only those keys in `app_settings`, which their values are currently `None`.
     app_settings.update_defaults_from(defaults);
 
-    if app_settings.is_game_available() {
+    if app_settings.is_game_available() || app_settings.is_norun() {
         let mut run: RunCommand = app_settings.build_command()?;
 
-        if app_settings.there_can_only_be_one() {
-            eprintln!(
-                "retroarch process already running. There Can Be Only One!"
-            );
-        } else {
-            run.output = app_settings.run(&mut run.cmdline);
+        if !app_settings.is_norun() {
+            if app_settings.there_can_only_be_one() {
+                eprintln!(
+                    "retroarch process already running. There Can Be Only One!"
+                );
+            } else {
+                run.output = app_settings.run(&mut run.cmdline);
+            }
         }
         if app_settings.is_list_cores() {
             for core in app_settings.find_core_match(&run.libretro) {

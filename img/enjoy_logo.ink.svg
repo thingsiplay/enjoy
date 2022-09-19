@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg8"
    version="1.1"
    viewBox="0 0 135.43663 43.858485"
    height="165.76433"
    width="511.88647"
    sodipodi:docname="enjoy_logo.ink.svg"
-   inkscape:version="1.0.2 (e86c870879, 2021-01-15, custom)">
+   inkscape:version="1.2.1 (9c6d41e410, 2022-07-14, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,18 +23,21 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1408"
+     inkscape:window-width="2558"
+     inkscape:window-height="1410"
      id="namedview848"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="135.45036"
-     inkscape:cy="74.618022"
-     inkscape:window-x="0"
-     inkscape:window-y="32"
+     inkscape:zoom="2"
+     inkscape:cx="325"
+     inkscape:cy="101"
+     inkscape:window-x="1"
+     inkscape:window-y="29"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg8"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
   <defs
      id="defs2">
     <rect
@@ -52,10 +55,30 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.05833341;stroke-dasharray:none;stroke-dashoffset:49.8;stroke-opacity:1;paint-order:fill markers stroke"
+     id="rect31833"
+     width="135.17206"
+     height="43.858482"
+     x="0"
+     y="0"
+     rx="0"
+     ry="0" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:29.7674px;line-height:1.25;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Heavy';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:0.778484"
+     x="23.722717"
+     y="28.289049"
+     id="text30582"
+     transform="scale(1.0393779,0.96211398)"><tspan
+       sodipodi:role="line"
+       x="23.722717"
+       y="28.289049"
+       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:29.7674px;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Heavy';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1a1a1a;fill-opacity:1;stroke-width:0.778484"
+       id="tspan30580">enjoy</tspan></text>
   <rect
      style="display:none;fill:#000000;stroke:#ffffff;stroke-width:0.458442;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="rect860"
@@ -119,39 +142,16 @@
        rx="1.1002274"
        ry="0.33977836" />
   </g>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.7314px;line-height:1.25;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#949494;fill-opacity:1;stroke:none;stroke-width:0.438592"
-     x="-48.440308"
-     y="58.405251"
-     id="text990"
-     transform="matrix(0.00666207,-0.9047605,1.1052788,-0.00189105,0,0)"><tspan
-       sodipodi:role="line"
-       x="-48.440308"
-       y="58.405251"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.7314px;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#949494;fill-opacity:1;stroke-width:0.438592"
-       id="tspan1032">en</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.2837px;line-height:1.25;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#a61815;fill-opacity:1;stroke:none;stroke-width:0.778479"
-     x="82.776604"
-     y="33.283699"
-     id="text998"
-     transform="scale(0.75888852,1.3177166)"><tspan
-       sodipodi:role="line"
-       x="82.776604"
-       y="33.283699"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.2837px;font-family:'Press Start 2P';-inkscape-font-specification:'Press Start 2P, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#a61815;fill-opacity:1;stroke-width:0.778479"
-       id="tspan1000">joy</tspan></text>
   <g
      id="g1018"
-     transform="matrix(0.70829362,0,0,0.6417924,-15.091234,-9.2235283)"
-     style="opacity:1">
+     transform="matrix(0.4813907,0,0,0.43619326,54.952116,4.6368344)"
+     style="opacity:1;stroke-width:1.47135">
     <g
        id="g1010"
-       transform="matrix(0.49261847,0,0,0.49261847,-1.4356473,5.6931365)">
+       transform="matrix(0.49261847,0,0,0.49261847,-1.4356473,5.6931365)"
+       style="stroke-width:1.47135">
       <ellipse
-         style="fill:#000000;fill-opacity:1;stroke-width:0.264583"
+         style="fill:#000000;fill-opacity:1;stroke-width:0.389294"
          id="ellipse1004"
          cx="86.7631"
          cy="143.70882"
@@ -159,33 +159,46 @@
          ry="12.537492" />
       <g
          id="g1008"
-         style="fill:#15a69d;fill-opacity:1">
+         style="fill:#ffffff;fill-opacity:1;stroke-width:1.47135">
         <ellipse
-           style="fill:#949494;fill-opacity:1;stroke-width:0.264583"
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0.389294"
            id="ellipse1006"
            cx="86.7631"
            cy="140.53386"
            rx="40.597324"
-           ry="12.537492" />
+           ry="12.537492"
+           inkscape:label="ellipse1006" />
       </g>
     </g>
     <path
        id="path1012"
-       style="fill:#000000;stroke-width:0.0876314"
+       style="fill:#000000;stroke-width:0.128936"
        d="m 45.637539,45.774373 h 11.3439 L 47.450909,75.28375 H 36.107025 Z"
        sodipodi:nodetypes="ccccc" />
     <circle
-       style="fill:#a61815;fill-opacity:1;stroke-width:0.125085"
+       style="fill:#a61815;fill-opacity:1;stroke-width:0.184042"
        id="circle1014"
        cx="54.539787"
        cy="34.651894"
        r="20.025862" />
     <ellipse
-       style="fill:#000000;fill-opacity:1;stroke-width:0.0465513"
+       style="fill:#000000;fill-opacity:1;stroke-width:0.068493"
        id="ellipse1016"
        cx="41.305485"
        cy="74.922646"
        rx="7.1427765"
        ry="2.2058723" />
   </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.37349px;line-height:1.25;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;display:inline;fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:0.778488"
+     x="51.110737"
+     y="13.601357"
+     id="text30488"
+     transform="scale(1.4221095,0.70318075)"><tspan
+       sodipodi:role="line"
+       x="51.110737"
+       y="13.601357"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.37349px;font-family:'Exo 2';-inkscape-font-specification:'Exo 2, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#1a1a1a;fill-opacity:1;stroke-width:0.778488"
+       id="tspan30486">play:nice</tspan></text>
 </svg>

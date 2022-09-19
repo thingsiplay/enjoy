@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use atty::Stream;
 
 /// Reads in each line from stdin, if anything is given.
-pub(crate) fn list_from_stdin() -> Result<Vec<String>, Box<dyn Error>> {
+pub fn list_from_stdin() -> Result<Vec<String>, Box<dyn Error>> {
     let mut list: Vec<String> = vec![];
 
     if atty::is(Stream::Stdout) && atty::isnt(Stream::Stdin) {
@@ -26,5 +26,17 @@ pub fn print_path(path: &Option<PathBuf>) {
 
     if !string_path.is_empty() {
         println!("{}", string_path);
+    }
+}
+
+/// Prints the fullpath of an existing file.
+pub fn print_fullpath(path: &Option<PathBuf>) {
+    match path {
+        Some(file) => {
+            if let Some(fullpath) = file::to_fullpath(file) {
+                println!("{}", fullpath.display());
+            }
+        }
+        None => (),
     }
 }

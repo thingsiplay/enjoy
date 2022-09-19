@@ -15,10 +15,11 @@ Play any game ROM with associated emulator in *RetroArch* on Linux
 
 **enjoy** is a wrapper around "RetroArch" on Linux to help running emulator
 cores on the commandline.  A user configuration file can be setup, including
-rules and aliases to file extensions and emulator paths.  Each time the program
-runs, it will lookup these settings to determine the correct core for each
-given extension.  It can be even used to launch games directly within your
-favorite file manager by double clicking the ROM file.
+rules and core aliases pointing to file extensions and emulator paths.  Each
+time the program runs, it will lookup these settings to determine the correct
+core for each given extension.  It can be even used to launch games directly
+within your favorite file manager by double clicking the ROM file, if file
+extension is registered to open **enjoy** as the default program.
 
 Use option `-h` for short help and `--help` for detailed help.
 
@@ -28,39 +29,51 @@ Use option `-h` for short help and `--help` for detailed help.
 $ enjoy '~/roms/snes/Super Mario World (U) [!].smc'
 
 $ ls -1 $(readlink -f ~/Emulatoren/games/gb)/* | enjoy --filter 'mario' -xWn
+
+$ find . -maxdepth 2 | fzf | enjoy -xWn
 ```
 
 Depending on your shell, you might need to escape the `!` in example. When
 multiple ROMs are given, then the first one will be loaded. There are many
 options available, including filtering such a game list or output the entire
-command to run RetroArch.
+command used to run RetroArch.
 
 ### Features
 
-- run *RetroArch* games directly from your terminal or file manager
-- combine it with other programs output like `grep`, `ls` or `dmenu` to play a
-  game from a list of ROM files
+- run *RetroArch* games directly from terminal or filemanager
+- combine from output like `grep`, `ls` or `dmenu` to select a file
 - fast startup
-- easy to configure in a single INI file format
+- easy to configure
 
 ### Quick Start
 
-1. Install and setup *RetroArch* first, if not done already:
-   [RetroArch](https://www.retroarch.com/)
-2. Download **enjoy** from
-   [Releases](https://github.com/thingsiplay/enjoy/releases) and unpack it.
-3. Optionally, install it in a directory within *$PATH*.  The default
-   *"install.sh"* script that comes with the downloadable distribution archive
-   does it.  Read a more detailed description about the installation process in
-   the Wiki:
-   [Installation](https://github.com/thingsiplay/enjoy/wiki/Installation)
-4. Execute `enjoy --open-config` to open the default configuration file or
-   create one at "~/.config/enjoy/default.ini" if it does not exist.  Read more
-   about the configuration at
-   [User Configuration File](User-Configuration-File).
-5. Optionally, register **enjoy** as the default program to the specific ROM
-   file extensions (in example *".smc"*).
-6. Enjoy.
+Install and setup *RetroArch* first, if not done already:
+[RetroArch](https://www.retroarch.com/)
+
+#### Install **enjoy**, if you have cargo installed ...
+
+- Build and install from [crates.io](https://crates.io/crates/enjoy/) with
+   `cargo install enjoy`.
+
+#### ... or get binary manually from Github
+
+- Download **enjoy** binary from
+  [Releases](https://github.com/thingsiplay/enjoy/releases) and unpack it.
+- Optionally, copy the file "enjoy" to a directory within *$PATH* and set the
+  executable bit.  The *"install.sh"* script does that for you, if you want.
+  Read a more detailed description about the installation process in the Wiki:
+  [Installation](https://github.com/thingsiplay/enjoy/wiki/Installation)
+
+#### Configure the user settings
+
+- Execute `enjoy --open-config` to open the default configuration file or
+  create one at "~/.config/enjoy/default.ini" if it does not exist.  Read more
+  about the configuration at
+  [User Configuration File](User-Configuration-File).
+- Optionally, register **enjoy** as the default program to the specific ROM
+  file extensions (in example *".smc"*).
+
+Enjoy.
 
 ## User Configuration File
 
@@ -76,13 +89,16 @@ retroarch = /usr/bin/retroarch
 
 [cores]
 snes = snes9x
-gb = sameboy_libretro.so
+gb gbc = sameboy_libretro.so
 
 [.smc .sfc]
 core = snes
 
-[/home/user/roms/psx/]
-core = psx
+[.gb]
+core = gb
+
+[/home/user/roms/psx*]
+libretro = mednafen_psx_hw
 ```
 
 There are 4 different categories of sections.
@@ -90,34 +106,40 @@ There are 4 different categories of sections.
 - `[options]` - *Main Options*:  These are the same options found in the
   commandline interface of the program.  Use `enjoy -h` for short overview or
   `enjoy --help` for a longer description of all possible options.
-- `[cores]` - *Core Rules*:  Custom alias to any "libretro" core from
-  "RetroArch".  On the left side is the name of the core and on the right side
-  the path or filename of an emulator core.  If the filename has no directory
-  part, then it will be searched in the "libretro-directory".  The part
-  "_libretro.so" in the filename part is optional.
-- `[.ext1 .ext2]` - *Extension Rules*:  When a game ROM is loaded up, it's
-  extension is compared if one of these matches.  Each extension rule consists
-  of a single or a group of space separated extensions.  Each has to start with
-  a dot in their section names.  Their rules can include a `core` rule, which
-  will be looked up at section `[cores]`.  Or it can directly have `libretro`
-  rule, which is a path to an emulator.
-- `[/path/to/directory]` - *Directory Rules*:  Any section with a slash in the
-  name is a directory rule.  In this case the folder in which the loaded up
-  game ROM is compared, instead it's extension.  If the game is in one of these
-  folders, then these rules kick in.  These are the same `core` and `libretro`
-  rules.
 
-Directory Rules should be used sparingly, because a each time the program runs,
-all directories are checked.
+- `[cores]` - *Core Rules*:  Custom alias to any "libretro" core from
+  "RetroArch".  On the left side is the name of the core.  It can be a list of
+  names separated by space.  On the right side is the filename or entire path
+  of an emulator core.  If filename has no directory part, then the core will
+  be searched in "libretro-directory" (which is the path where your cores are
+  configured and installed in RetroArch).  The part "\_libretro.so" in the
+  filename is optional.
+
+- `[.ext1 .ext2]` - *Extension Rules*:  When a game ROM is loaded up, it's file
+  extension is compared to these rules.  Each extension rule consists of a
+  single or group of space separated extensions.  Each section name has to
+  start with a dot to be recognized as an "Extension Rule".  It can contain a
+  `core` option, which will be looked up in section `[cores]` to determine
+  libretro path.  Or it can have `libretro` option, which has highest priority
+  and points directly to an libretro path.
+
+- `[/path/to/directory]` - *Directory Rules*:  Any section with a slash in the
+  name is a "Directory Rule".  When a game ROM is loaded up, it's directory
+  part excluding the filename is compared against theses rules.  Basic
+  wildcards are supported too.  The star `*`, to match none or any number of
+  characters and question mark, to match a single character.  If a match is
+  found, then it's associated `core` or `libretro` option will be looked up.
 
 ## Known Bugs, Limitations and Quirks
 
-- A few options from `retroarch` main program are not supported yet.  As a
-  workaround arguments can be directly passed over to `retroarch` itself, by
-  specifying the `--` on commandline or `retroarch_arguments =` in
-  configuration file.
-- The GUI will still be loaded up each time an emulator is run with
-  "RetroArch".  It is recommended to use 2 times `ESC`-key in a row to quickly
-  end the current play session and closing the background GUI.
+- Not all commandline options from `retroarch` main program are supported.  As
+  a workaround arguments can be directly passed over to `retroarch` with the
+  option `--` on the commandline or `retroarch_arguments =` option in the
+  configuration file of **enjoy**.
+
+- The RetroArch GUI will be loaded up each time a game runs.  At default the
+  `ESC`-key can be pressed two times in row to quickly end the current play
+  session, closing RetroArch and the GUI.
+
 - The Flatpak or Snap version of *"RetroArch"* might not work with this
-  program.
+  program, as it was not tested (reports are welcome).

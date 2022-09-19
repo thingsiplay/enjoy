@@ -3,7 +3,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 /// Opens a file with the associated default application.  It must be af file, not a folder.
-pub(crate) fn open_with_default(file: &Path) -> Result<(), Box<dyn Error>> {
+pub fn open_with_default(file: &Path) -> Result<(), Box<dyn Error>> {
     let fullpath: PathBuf = match to_fullpath(file) {
         Some(fullpath) => fullpath,
         None => return Err("Problem finding the config file.".into()),
@@ -24,7 +24,7 @@ pub(crate) fn open_with_default(file: &Path) -> Result<(), Box<dyn Error>> {
 
 /// Expands tilde and environmental variables in a `Path` and canonicalize to fullpath into a
 /// `PathBuf`.  `None` if not possible.
-pub(crate) fn to_fullpath(file: &Path) -> Option<PathBuf> {
+pub fn to_fullpath(file: &Path) -> Option<PathBuf> {
     match shellexpand::full(&file.display().to_string()) {
         Ok(path) => match PathBuf::from(path.to_string()).canonicalize() {
             Ok(fullpath) => Some(fullpath),
@@ -35,12 +35,12 @@ pub(crate) fn to_fullpath(file: &Path) -> Option<PathBuf> {
 }
 
 /// Expand the tilde in a `Path` and create a `PathBuf` from it.
-pub(crate) fn tilde(file: &Path) -> PathBuf {
+pub fn tilde(file: &Path) -> PathBuf {
     PathBuf::from(shellexpand::tilde(&file.display().to_string()).into_owned())
 }
 
 /// Convert an optional `PathBuf` into a `String`.  `None` is translated into an empty `String`.
-pub(crate) fn to_str(file: Option<&PathBuf>) -> String {
+pub fn to_str(file: Option<&PathBuf>) -> String {
     match file {
         Some(path) => path.display().to_string(),
         None => "".to_string(),
@@ -49,7 +49,7 @@ pub(crate) fn to_str(file: Option<&PathBuf>) -> String {
 
 /// Check if filename (including extension) ends with a specific text and add if its missing.
 /// The extension is part of `endswith` suffix check.
-pub(crate) fn endswith(endswith: &str, mut file: PathBuf) -> PathBuf {
+pub fn endswith(endswith: &str, mut file: PathBuf) -> PathBuf {
     if !endswith.is_empty() {
         let filename: &str = file
             .file_name()
@@ -62,6 +62,15 @@ pub(crate) fn endswith(endswith: &str, mut file: PathBuf) -> PathBuf {
     }
 
     file
+}
+
+/// Simply remove last character, if it is a slash.
+pub fn trim_last_slash(mut path: String) -> String {
+    if path.ends_with('/') {
+        path.pop();
+    }
+
+    path
 }
 
 #[cfg(test)]

@@ -1,6 +1,7 @@
 SHELL = /bin/bash
 
 # Will strip strings from distribution binary.
+# No need anymore, it is enabled through Cargo.toml.
 # 0=disable
 # 1=enable
 STRIP_DIST_BIN:=0

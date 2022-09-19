@@ -2,6 +2,39 @@
 
 Keep track of changes with every release of https://github.com/thingsiplay/enjoy .
 
+## [0.4.0] - September 18, 2022
+
+- new: option `-v`, `--version` to display the current version information of
+  the app
+- new: option `-s`, `--strict` to turn option `--filter` into strict mode, case
+  sensitive and no longer adding stars around the pattern automatically
+  (meaning it matches exactly the name and not somewhere in the middle of
+  filename), example: `-sf "Super"` won't match "Super Mario Land.gb", but
+  `-sf "Super*"` will
+- changed: `-f`, `--filter` can be used multiple times, all of them have to
+  match to get a result (works only as commandline option)
+- changed: multiple custom core names under section `[cores]` in user settings
+  ini file can be specified in one line separated by space, example:
+  `gb gbc = sameboy`
+- changed: if a game ROM is not found and option `-x` is active, then
+  simulation of the process will continue and no longer stops, this allows
+  running other options such as `-n` with non existing games to quickly check
+  associated file extension, example: `-xn ..sfc`
+- changed: wildcard support for directory rules implemented, only supported
+  wildcards are star `*` (none or any number of characters) and question mark
+  `?` (exactly one any character), example: `[~/Emulatoren/games/psx\*]`
+- changed: directory rules are exact match now, no longer is it compared if the
+  game path "starts" with the directory path, also trailing basckslash is
+  optional
+- changed: internal library updated to respect the order of rules in the
+  configuration for priority reasons, first match of a rule will be used, this
+  is not considered a bug, because the order was not important before
+- new: option `-o`, `--config-path` to print the fullpath of the user settings
+  ini file
+- changed: previous short option `-o` for `--open-config` is renamed to`-O` and
+  will no longer print path
+- changed: logo rework
+
 ## [0.3.0] - September 2, 2022
 
 - new: option `-n` and `--list-cores` to list all custom core names in section
