@@ -1,6 +1,14 @@
 # Changelog
 
-Keep track of changes with every release of https://github.com/thingsiplay/enjoy .
+Keep track of changes for [enjoy](https://github.com/thingsiplay/enjoy) .
+
+## 0.5.0 - 2024
+
+- changed: if an empty `""` entry is included, then entire program assumes
+  nothing is given, in example following does not work: `enjoy mario.smc ""`,
+- changed: the options parser and help text from `-h` or `--help` has no
+  longer colored output and is reorganized
+- internal: some code refactor, formatting and dependency upgrades
 
 ## [0.4.0] - September 18, 2022
 
