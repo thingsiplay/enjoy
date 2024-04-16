@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use clap::value_parser;
 use clap::Parser;
 
 /// Play any game ROM with associated emulator in `RetroArch`.
@@ -32,7 +33,7 @@ pub struct Opt {
     /// and expanded.
     ///
     /// Example: "~/roms/snes/Super Mario World (U) [\!].smc"
-    #[clap(parse(from_os_str))]
+    #[clap(value_parser=value_parser!(PathBuf))]
     pub games: Vec<PathBuf>,
 
     /// Bypass additional arguments to `retroarch`
@@ -56,7 +57,6 @@ pub struct Opt {
     #[clap(
         short = 'c',
         long,
-        parse(from_os_str),
         value_name = "FILE",
         display_order = 1,
         default_value = "~/.config/enjoy/default.ini"
@@ -81,13 +81,7 @@ pub struct Opt {
     /// filename without directory part, then the systems `$PATH` is searched.
     ///
     /// Example: "/usr/bin/retroarch" [default: retroarch]
-    #[clap(
-        short = 'A',
-        long,
-        parse(from_os_str),
-        value_name = "APP",
-        display_order = 7
-    )]
+    #[clap(short = 'A', long, value_name = "APP", display_order = 7)]
     pub retroarch: Option<PathBuf>,
 
     /// Path to `RetroArch` base configuration
@@ -98,13 +92,7 @@ pub struct Opt {
     /// `$HOME/.config/retroarch/retroarch.cfg`, `$HOME/.retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/retroarch.cfg"
-    #[clap(
-        short = 'B',
-        long,
-        parse(from_os_str),
-        value_name = "FILE",
-        display_order = 7
-    )]
+    #[clap(short = 'B', long, value_name = "FILE", display_order = 7)]
     pub retroarch_config: Option<PathBuf>,
 
     /// Force specific libretro core by filename
@@ -120,7 +108,6 @@ pub struct Opt {
     #[clap(
         short = 'L',
         long,
-        parse(from_os_str),
         value_name = "FILE",
         display_order = 5,
         conflicts_with = "core"
@@ -134,13 +121,7 @@ pub struct Opt {
     /// configuration file `retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/cores"
-    #[clap(
-        short = 'D',
-        long,
-        parse(from_os_str),
-        value_name = "DIR",
-        display_order = 6
-    )]
+    #[clap(short = 'D', long, value_name = "DIR", display_order = 6)]
     pub libretro_directory: Option<PathBuf>,
 
     /// Force specific libretro core by user defined alias
@@ -218,7 +199,7 @@ pub struct Opt {
         short = 'i',
         long,
         display_order = 8,
-        conflicts_with_all = &["config", "open-config", "core"]
+        conflicts_with_all = &["config", "open_config", "core"]
     )]
     pub noconfig: bool,
 
@@ -237,10 +218,4 @@ pub struct Opt {
     /// that.
     #[clap(short = 'z', long, display_order = 8)]
     pub nostdin: bool,
-
-    /// Print version information
-    ///
-    /// Print the version number of this app and exit
-    #[clap(short = 'v', long, display_order = 9)]
-    pub version: bool,
 }

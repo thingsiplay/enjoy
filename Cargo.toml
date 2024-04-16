@@ -15,7 +15,7 @@ publish = false
 [dependencies]
 configparser = { version = "3.0", features = ["indexmap"] }
 indexmap = "1.9"
-clap = {version = "3.2", features = ["derive"]}
+clap = { version = "4.5", features = ["derive"] }
 atty = "0.2"
 shellexpand = "2.1"
 wildmatch = "2.1"

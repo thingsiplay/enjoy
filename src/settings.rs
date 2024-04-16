@@ -125,7 +125,7 @@ impl Settings {
         let mut settings: Self = Self::new();
 
         let args: Opt = match options {
-            Some(opt) => Opt::from_iter(opt.iter()),
+            Some(opt) => Opt::parse_from(opt.iter()),
             None => Opt::parse(),
         };
 
