@@ -23,7 +23,7 @@ use clap::Parser;
 /// $ ls -1 $(readlink -f ~/roms/gb)/* | enjoy -xWn
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Parser)]
-#[clap(version, author, after_help = "https://github.com/thingsiplay/enjoy")]
+#[command(version, author, after_help = "https://github.com/thingsiplay/enjoy")]
 pub struct Opt {
     /// Path to ROM file
     ///
@@ -33,7 +33,7 @@ pub struct Opt {
     /// and expanded.
     ///
     /// Example: "~/roms/snes/Super Mario World (U) [\!].smc"
-    #[clap(value_parser=value_parser!(PathBuf))]
+    #[arg(value_parser=value_parser!(PathBuf))]
     pub games: Vec<PathBuf>,
 
     /// Bypass additional arguments to `retroarch`
@@ -44,7 +44,7 @@ pub struct Opt {
     /// ensure correctness.
     ///
     /// Example: "-- --set-shader ''"
-    #[clap(last = true)]
+    #[arg(last = true)]
     pub retroarch_arguments: Vec<String>,
 
     /// Path to the user settings
@@ -54,7 +54,7 @@ pub struct Opt {
     /// higher priority over the individual settings in this file.
     ///
     /// Example: "/home/user/.config/enjoy/alternative.ini"
-    #[clap(
+    #[arg(
         short = 'c',
         long,
         value_name = "FILE",
@@ -66,13 +66,13 @@ pub struct Opt {
     /// Open user settings
     ///
     /// Opens the user config INI file with it's associated default application and exit.
-    #[clap(short = 'O', long, display_order = 1)]
+    #[arg(short = 'O', long, display_order = 1)]
     pub open_config: bool,
 
     /// Print path of user settings
     ///
     /// Prints path of the user config INI file to stdout and exit.
-    #[clap(short = 'o', long, display_order = 1)]
+    #[arg(short = 'o', long, display_order = 1)]
     pub config_path: bool,
 
     /// Path or name of `RetroArch` command
@@ -81,7 +81,7 @@ pub struct Opt {
     /// filename without directory part, then the systems `$PATH` is searched.
     ///
     /// Example: "/usr/bin/retroarch" [default: retroarch]
-    #[clap(short = 'A', long, value_name = "APP", display_order = 7)]
+    #[arg(short = 'A', long, value_name = "APP", display_order = 7)]
     pub retroarch: Option<PathBuf>,
 
     /// Path to `RetroArch` base configuration
@@ -92,7 +92,7 @@ pub struct Opt {
     /// `$HOME/.config/retroarch/retroarch.cfg`, `$HOME/.retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/retroarch.cfg"
-    #[clap(short = 'B', long, value_name = "FILE", display_order = 7)]
+    #[arg(short = 'B', long, value_name = "FILE", display_order = 7)]
     pub retroarch_config: Option<PathBuf>,
 
     /// Force specific libretro core by filename
@@ -105,7 +105,7 @@ pub struct Opt {
     /// `/home/user/.config/retroarch/cores/snes9x_libretro.so`.
     ///
     /// Example: "snes9x"
-    #[clap(
+    #[arg(
         short = 'L',
         long,
         value_name = "FILE",
@@ -121,7 +121,7 @@ pub struct Opt {
     /// configuration file `retroarch.cfg`.
     ///
     /// Example: "/home/user/.config/retroarch/cores"
-    #[clap(short = 'D', long, value_name = "DIR", display_order = 6)]
+    #[arg(short = 'D', long, value_name = "DIR", display_order = 6)]
     pub libretro_directory: Option<PathBuf>,
 
     /// Force specific libretro core by user defined alias
@@ -131,7 +131,7 @@ pub struct Opt {
     /// `[cores]` as `alias=libretro_path`.
     ///
     /// Example: "snes"
-    #[clap(short = 'C', long, value_name = "ALIAS", display_order = 4)]
+    #[arg(short = 'C', long, value_name = "ALIAS", display_order = 4)]
     pub core: Option<String>,
 
     /// Apply simple wildcard to filter list of games
@@ -145,7 +145,7 @@ pub struct Opt {
     /// times.  All of them have to match.
     ///
     /// Example: "mario*[\!]"
-    #[clap(short = 'f', long, value_name = "PATTERN", display_order = 2)]
+    #[arg(short = 'f', long, value_name = "PATTERN", display_order = 2)]
     pub filter: Option<Vec<String>>,
 
     /// Strict mode for filter
@@ -153,20 +153,20 @@ pub struct Opt {
     /// Turns the option `--filter` to be more strict when comparing filenames.  It makes it case
     /// sensitive and a word will match the beginning to end of filename, no longer are stars "*"
     /// surrounding the search pattern added to match any part.
-    #[clap(short = 's', long, display_order = 2)]
+    #[arg(short = 's', long, display_order = 2)]
     pub strict: bool,
 
     /// Print selected game ROM
     ///
     /// Writes the full filepath of the selected game to stdout.
-    #[clap(short = 'w', long, display_order = 1)]
+    #[arg(short = 'w', long, display_order = 1)]
     pub which: bool,
 
     /// Print RetroArch commandline
     ///
     /// Writes full command with all arguments used to run RetroArch to stdout. Has higher priority
     /// than option --which.
-    #[clap(short = 'W', long, display_order = 1)]
+    #[arg(short = 'W', long, display_order = 1)]
     pub which_command: bool,
 
     /// Print all core names
@@ -174,20 +174,20 @@ pub struct Opt {
     /// Lists all core names on the left side of the user configuration under section "\[cores\]".
     /// Will output matching cores to the libretro core that would be used with the game.  Without
     /// a game, all cores are listed.
-    #[clap(short = 'n', long, display_order = 3)]
+    #[arg(short = 'n', long, display_order = 3)]
     pub list_cores: bool,
 
     /// Force fullscreen mode
     ///
     /// Runs the emulator and `RetroArch` UI in fullscreen, regardless of any other setting.
-    #[clap(short = 'F', long, display_order = 3)]
+    #[arg(short = 'F', long, display_order = 3)]
     pub fullscreen: bool,
 
     /// There Can Only Be One!
     ///
     /// Prevents running another `retroarch` process, if one is already active.  In this case the
     /// final command of the emulator will not execute.
-    #[clap(short = '1', long, display_order = 3)]
+    #[arg(short = '1', long, display_order = 3)]
     pub highlander: bool,
 
     /// Ignore user settings
@@ -195,7 +195,7 @@ pub struct Opt {
     /// The config INI file of this program will be ignored and not loaded up.  The entire
     /// application relies on commandline options and environmental variables.  Therefore any
     /// predefined rules and aliases from that file are ignored.
-    #[clap(
+    #[arg(
         short = 'i',
         long,
         display_order = 8,
@@ -208,7 +208,7 @@ pub struct Opt {
     /// The `retroarch` run command to play ROMs will not be executed.  Internally the process is
     /// still simulated, up until to the point of running the emulator.  If a game ROM is not
     /// found, then the simulation will continue to allow execution of other options.
-    #[clap(short = 'x', long, display_order = 8)]
+    #[arg(short = 'x', long, display_order = 8)]
     pub norun: bool,
 
     /// Dismiss reading from stdin
@@ -216,6 +216,6 @@ pub struct Opt {
     /// Ignores the `stdin` and do not test or read any data from it.  Normally the program will
     /// look and read all lines from `stdin` as additional game entries.  This option will disable
     /// that.
-    #[clap(short = 'z', long, display_order = 8)]
+    #[arg(short = 'z', long, display_order = 8)]
     pub nostdin: bool,
 }
