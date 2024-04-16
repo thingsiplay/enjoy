@@ -1049,27 +1049,32 @@ mod tests {
         Ok(())
     }
 
+    //NOTE: An empty "" argument does not work anymore and is replaced by space " ".
     #[test]
     fn new_from_cmdline_emptygame_then_retroarch() -> Result<()> {
         let options: Vec<String> = vec![
             "enjoy".to_string(),
-            "".to_string(),
+            " ".to_string(),
             "--retroarch".to_string(),
             "/usr/bin/retroarch".to_string(),
         ];
         let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(Some(PathBuf::from("/usr/bin/retroarch")), args.retroarch);
-        assert_eq!(vec![PathBuf::from("")], args.games);
+        assert_eq!(vec![PathBuf::from(" ")], args.games);
 
         Ok(())
     }
 
+    //NOTE: An empty "" argument does not work anymore and is replaced by space " ".
     #[test]
     fn new_from_cmdline_game() -> Result<()> {
-        let options: Vec<String> =
-            vec!["enjoy".to_string(), "mario.smc".to_string(), "".to_string()];
-        let test_games: Vec<PathBuf> = vec![PathBuf::from("mario.smc"), PathBuf::from("")];
+        let options: Vec<String> = vec![
+            "enjoy".to_string(),
+            "mario.smc".to_string(),
+            " ".to_string(),
+        ];
+        let test_games: Vec<PathBuf> = vec![PathBuf::from("mario.smc"), PathBuf::from(" ")];
         let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(test_games, args.games);
