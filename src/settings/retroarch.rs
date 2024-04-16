@@ -37,24 +37,19 @@ pub fn is_running(process_name: &str, print_pid: bool) -> bool {
 pub fn search_default_config() -> Option<PathBuf> {
     let mut fullpath: PathBuf;
 
-    if let Ok(path) =
-        shellexpand::env("$XDG_CONFIG_HOME/retroarch/retroarch.cfg")
-    {
+    if let Ok(path) = shellexpand::env("$XDG_CONFIG_HOME/retroarch/retroarch.cfg") {
         fullpath = PathBuf::from(path.to_string());
         if fullpath.exists() {
             return Some(fullpath);
         }
     }
 
-    fullpath = PathBuf::from(
-        shellexpand::tilde("~/.config/retroarch/retroarch.cfg").to_string(),
-    );
+    fullpath = PathBuf::from(shellexpand::tilde("~/.config/retroarch/retroarch.cfg").to_string());
     if fullpath.exists() {
         return Some(fullpath);
     }
 
-    fullpath =
-        PathBuf::from(shellexpand::tilde("~/.retroarch.cfg").to_string());
+    fullpath = PathBuf::from(shellexpand::tilde("~/.retroarch.cfg").to_string());
     if fullpath.exists() {
         return Some(fullpath);
     }
@@ -162,8 +157,7 @@ mod tests {
         let mut lookup_keys: HashSet<String> = HashSet::new();
         lookup_keys.insert("libretro_directory".to_string());
 
-        let found_keys =
-            super::extract_default_inikeys(&inidata, &lookup_keys);
+        let found_keys = super::extract_default_inikeys(&inidata, &lookup_keys);
 
         assert_eq!(
             "/home/user/.config/retroarch/cores".to_string(),
@@ -191,8 +185,7 @@ mod tests {
         lookup_keys.insert("video_vsync".to_string());
         lookup_keys.insert("libretro_directory".to_string());
 
-        let found_keys =
-            super::extract_default_inikeys(&inidata, &lookup_keys);
+        let found_keys = super::extract_default_inikeys(&inidata, &lookup_keys);
 
         assert_eq!(
             "".to_string(),

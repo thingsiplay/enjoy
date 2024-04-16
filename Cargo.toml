@@ -9,7 +9,6 @@ license-file = "LICENSE"
 keywords = ["retroarch", "libretro", "emulation", "run", "launcher"]
 categories = ["command-line-utilities", "emulators"]
 edition = "2021"
-resolver = "2"
 publish = false
 
 [dependencies]

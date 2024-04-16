@@ -22,10 +22,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Ok(());
     }
 
-    let user_config =
-        Settings::new_from_config(argument_options.get_config())?;
-    let ignore_stdin: bool =
-        argument_options.is_nostdin() || user_config.is_nostdin();
+    let user_config = Settings::new_from_config(argument_options.get_config())?;
+    let ignore_stdin: bool = argument_options.is_nostdin() || user_config.is_nostdin();
     let stdin_games = Settings::new_from_stdin(ignore_stdin)?;
 
     let mut app_settings = Settings::new();
@@ -38,9 +36,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     if !app_settings.is_libretro_path_available() {
         // Extract keys and values from `retroarch.cfg` only if the path to `libretro` installation
         // directory in `RetroArch` is unknown.
-        let raconfig = Settings::new_from_retroarch_config(
-            app_settings.get_retroarch_config(),
-        )?;
+        let raconfig = Settings::new_from_retroarch_config(app_settings.get_retroarch_config())?;
         defaults.update_from(raconfig);
     }
     // Overwrite only those keys in `app_settings`, which their values are currently `None`.
@@ -51,9 +47,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         if !app_settings.is_norun() {
             if app_settings.there_can_only_be_one() {
-                eprintln!(
-                    "retroarch process already running. There Can Be Only One!"
-                );
+                eprintln!("retroarch process already running. There Can Be Only One!");
             } else {
                 run.output = app_settings.run(&mut run.cmdline);
             }
