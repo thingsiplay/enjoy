@@ -76,7 +76,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 fn print_cmdline(command: &Command) {
     print!("{:?}", command.get_program());
     for arg in command.get_args() {
-        print!(" {:?}", arg);
+        print!(" {arg:?}");
     }
     println!();
 }

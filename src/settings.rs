@@ -385,7 +385,7 @@ impl Settings {
             // Get valid entries only and convert to `(String, String)`.
             for (core_alias, libretro_path) in cores
                 .iter()
-                .filter(|(_, v)| !v.as_ref().unwrap_or(&"".to_string()).is_empty())
+                .filter(|(_, v)| !v.as_ref().unwrap_or(&String::new()).is_empty())
                 .map(|(k, v)| (k.to_string(), v.as_ref().unwrap()))
             {
                 for alias in core_alias.split_whitespace() {
@@ -604,7 +604,7 @@ impl Settings {
     /// execute and a few more data.
     pub fn build_command(&self) -> Result<RunCommand, String> {
         // `--retroarch`
-        let mut command: Command = Command::new(&file::to_str(self.retroarch.as_ref()));
+        let mut command: Command = Command::new(file::to_str(self.retroarch.as_ref()));
 
         // `game`
         // Get first entry of all games in the list, make it a full path and check if file exists.
@@ -634,7 +634,7 @@ impl Settings {
             None => {
                 if self.norun.unwrap_or(false) {
                     command.arg("");
-                    Some(PathBuf::from("".to_string()))
+                    Some(PathBuf::from(String::new()))
                 } else {
                     return Err("No matching game available".into());
                 }
@@ -852,11 +852,8 @@ impl Settings {
                 .as_ref()
                 .expect("Path to config ini file required.");
 
-            match file::to_fullpath(config_path) {
-                Some(ref path) => {
-                    file::open_with_default(path)?;
-                }
-                None => (),
+            if let Some(path) = file::to_fullpath(config_path) {
+                file::open_with_default(&path)?;
             }
 
             return Ok(true);
@@ -1042,11 +1039,8 @@ mod tests {
 
     #[test]
     fn new_from_cmdline_default_config() -> Result<()> {
-        let mut options: Vec<String> = vec![];
-        options.push("enjoy".to_string());
-
+        let options: Vec<String> = vec!["enjoy".to_string()];
         let test_config = Some(PathBuf::from("~/.config/enjoy/default.ini"));
-
         let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(test_config, args.config);
@@ -1057,12 +1051,12 @@ mod tests {
 
     #[test]
     fn new_from_cmdline_emptygame_then_retroarch() -> Result<()> {
-        let mut options: Vec<String> = vec![];
-        options.push("enjoy".to_string());
-        options.push("".to_string());
-        options.push("--retroarch".to_string());
-        options.push("/usr/bin/retroarch".to_string());
-
+        let options: Vec<String> = vec![
+            "enjoy".to_string(),
+            "".to_string(),
+            "--retroarch".to_string(),
+            "/usr/bin/retroarch".to_string(),
+        ];
         let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(Some(PathBuf::from("/usr/bin/retroarch")), args.retroarch);
@@ -1073,15 +1067,9 @@ mod tests {
 
     #[test]
     fn new_from_cmdline_game() -> Result<()> {
-        let mut options: Vec<String> = vec![];
-        options.push("enjoy".to_string());
-        options.push("mario.smc".to_string());
-        options.push("".to_string());
-
-        let mut test_games: Vec<PathBuf> = vec![];
-        test_games.push(PathBuf::from("mario.smc"));
-        test_games.push(PathBuf::from(""));
-
+        let options: Vec<String> =
+            vec!["enjoy".to_string(), "mario.smc".to_string(), "".to_string()];
+        let test_games: Vec<PathBuf> = vec![PathBuf::from("mario.smc"), PathBuf::from("")];
         let args = super::Settings::new_from_cmdline(Some(options));
 
         assert_eq!(test_games, args.games);
@@ -1398,7 +1386,7 @@ mod tests {
     fn select_game_first() {
         let games: Vec<PathBuf> = ["zelda.smc", "mario.smc", "sonic.md", "game4.gb"]
             .iter()
-            .map(|g| PathBuf::from(g))
+            .map(PathBuf::from)
             .collect();
         let mut settings = super::Settings {
             games,

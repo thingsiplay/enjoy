@@ -133,18 +133,17 @@ mod tests {
 
     #[test]
     fn is_running_cargo() {
-        assert_eq!(true, super::is_running("cargo", false));
+        assert!(super::is_running("cargo", false));
     }
 
     #[test]
     fn is_running_empty() {
-        assert_eq!(false, super::is_running("", false));
+        assert!(!super::is_running("", false));
     }
 
     #[test]
     fn extract_default_inikeys_single() {
-        let inidata: IndexMap<String, IndexMap<String, Option<String>>>;
-        inidata = ini::Ini::new()
+        let inidata: IndexMap<String, IndexMap<String, Option<String>>> = ini::Ini::new()
             .read(String::from(
                 "
                 video_vsync = \"true\"
@@ -168,8 +167,7 @@ mod tests {
 
     #[test]
     fn extract_default_inikeys_multiple() {
-        let inidata: IndexMap<String, IndexMap<String, Option<String>>>;
-        inidata = ini::Ini::new()
+        let inidata: IndexMap<String, IndexMap<String, Option<String>>> = ini::Ini::new()
             .read(String::from(
                 "
                 video_vsync = \"true\"

@@ -25,7 +25,7 @@ pub fn print_path(path: &Option<PathBuf>) {
     let string_path: String = file::to_str(path.as_ref());
 
     if !string_path.is_empty() {
-        println!("{}", string_path);
+        println!("{string_path}");
     }
 }
 

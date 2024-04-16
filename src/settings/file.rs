@@ -43,7 +43,7 @@ pub fn tilde(file: &Path) -> PathBuf {
 pub fn to_str(file: Option<&PathBuf>) -> String {
     match file {
         Some(path) => path.display().to_string(),
-        None => "".to_string(),
+        None => String::new(),
     }
 }
 
@@ -57,7 +57,7 @@ pub fn endswith(endswith: &str, mut file: PathBuf) -> PathBuf {
             .to_str()
             .unwrap_or_default();
         if !filename.ends_with(endswith) {
-            file = file.with_file_name(format!("{}{}", filename, endswith));
+            file = file.with_file_name(format!("{filename}{endswith}"));
         }
     }
 
