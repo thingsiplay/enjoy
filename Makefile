@@ -86,17 +86,10 @@ dist: distclean readme
 
 readme:
 	mkdir -p "$(PACKAGE_DEST_DIR)"
-	pandoc "./README.md" -o "$(PACKAGE_DEST_DIR)/README.html"
+	cp "./README.md" "$(PACKAGE_DEST_DIR)/README.md"
 
 distclean:
 	-cd "$(PACKAGE_DEST_DIR)/img" && rm -f *
 	-rm -d -f "$(PACKAGE_DEST_DIR)/img"
 	-cd "$(PACKAGE_DEST_DIR)" && rm -f *
 	-rm -d -f "$(PACKAGE_DEST_DIR)"
-
-install:
-	cd "$(PACKAGE_DEST_DIR)" && "./install.sh"
-
-uninstall:
-	cd "$(PACKAGE_SRC_DIR)" && "./uninstall.sh"
-
