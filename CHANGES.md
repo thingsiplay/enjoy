@@ -2,13 +2,15 @@
 
 Keep track of changes for [enjoy](https://github.com/thingsiplay/enjoy) .
 
-## 0.5.0 - 2024
+## [0.5.0] - 2024
 
 - changed: the options parser and help text from `-h` or `--help` has no
   longer colored output and is reorganized
 - changed: if an empty `""` entry is included, then entire program assumes
   nothing is given, in example following does not work: `enjoy mario.smc ""`,
+- changed: logo slightly updated and corrected
 - changed: pandoc no longer used to convert README.md to HTML with Makefile
+- renamed: CHANGELOG.md to CHANGES.md
 - removed: install.sh and uninstall.sh scripts removed
 - internal: some code refactor, formatting and dependency upgrades
 
