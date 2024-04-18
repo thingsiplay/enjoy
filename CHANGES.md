@@ -2,7 +2,7 @@
 
 Keep track of changes for [enjoy](https://github.com/thingsiplay/enjoy) .
 
-## [0.5.0] - 2024
+## [0.5.0] - April 18, 2024
 
 - changed: the options parser and help text from `-h` or `--help` has no
   longer colored output and is reorganized
