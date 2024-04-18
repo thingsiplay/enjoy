@@ -9,7 +9,7 @@ Play any game ROM with associated emulator in _RetroArch_ on Linux
 - **Download**: [Github](https://github.com/thingsiplay/enjoy/releases)
 - **Rust Package Registry**: [Crates](https://crates.io/crates/enjoy/)
 
-![enjoy](./img/enjoy_logo.svg "enjoy")
+![enjoy](./img/enjoy_logo.svg "logo")
 
 ## Introduction
 
@@ -95,8 +95,9 @@ Install and setup _RetroArch_ first, if not done already:
 #### Configure the user settings
 
 - Execute `enjoy --open-config` to open the default configuration file or
-  create one if it does not exist at: "~/.config/enjoy/default.ini" . Read more
-  about the configuration at [User Configuration File](User-Configuration-File).
+  create one if it does not exist at: "~/.config/enjoy/default.ini" . Have a look
+  in "example-config.ini" to see how the file is structured. Read more about the
+  configuration at [User Configuration File](User-Configuration-File).
 - Optionally, register **enjoy** as the default application to open with. Right
   click on the Rom file, open its properties and set the default program for this
   file extension (in example on ".smc" files) to `enjoy` . Next time you double
