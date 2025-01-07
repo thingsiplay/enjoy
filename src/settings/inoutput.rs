@@ -21,8 +21,8 @@ pub fn list_from_stdin() -> Result<Vec<String>, Box<dyn Error>> {
 }
 
 /// Prints out a non empty path.
-pub fn print_path(path: &Option<PathBuf>) {
-    let string_path: String = file::to_str(path.as_ref());
+pub fn print_path(path: Option<&PathBuf>) {
+    let string_path: String = file::to_str(path);
 
     if !string_path.is_empty() {
         println!("{string_path}");
@@ -30,13 +30,10 @@ pub fn print_path(path: &Option<PathBuf>) {
 }
 
 /// Prints the fullpath of an existing file.
-pub fn print_fullpath(path: &Option<PathBuf>) {
-    match path {
-        Some(file) => {
-            if let Some(fullpath) = file::to_fullpath(file, false) {
-                println!("{}", fullpath.display());
-            }
+pub fn print_fullpath(path: Option<&PathBuf>) {
+    if let Some(file) = path {
+        if let Some(fullpath) = file::to_fullpath(file, false) {
+            println!("{}", fullpath.display());
         }
-        None => (),
     }
 }

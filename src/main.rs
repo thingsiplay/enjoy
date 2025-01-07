@@ -60,7 +60,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         if app_settings.is_which_command() {
             print_cmdline(&run.cmdline);
         } else {
-            app_settings.print_which(run.game);
+            app_settings.print_which(&run.game);
         }
     } else if app_settings.is_list_cores() {
         app_settings.print_cores();

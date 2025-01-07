@@ -62,14 +62,13 @@ pub fn search_default_config() -> Option<PathBuf> {
 /// for in the file and extract only those key and value pairs as strings.  The surrounding
 /// double quotes are removed from the value.
 pub fn parse_retroarch_config(
-    path: &Option<PathBuf>,
+    path: Option<&PathBuf>,
     lookup_keys: &HashSet<String>,
 ) -> Result<IndexMap<String, String>, Box<dyn Error>> {
     let mut ini = ini::Ini::new_cs();
 
     match ini.load(
-        &path
-            .as_ref()
+        path.as_ref()
             .expect("No configuration file.")
             .display()
             .to_string(),

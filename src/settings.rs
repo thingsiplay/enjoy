@@ -192,7 +192,7 @@ impl Settings {
 
     /// Parse `retroarch.cfg` the own configuration file of `RetroArch` itself and create a new
     /// `Settings` struct out of it.
-    pub fn new_from_retroarch_config(file: &Option<PathBuf>) -> Result<Self> {
+    pub fn new_from_retroarch_config(file: Option<&PathBuf>) -> Result<Self> {
         let mut settings: Self = Self::new();
 
         // If no file was given, then search at `RetroArch` default locations for the file `retroarch.cfg`.
@@ -206,7 +206,7 @@ impl Settings {
         keys_to_get.insert("libretro_directory".to_string());
 
         let retroarch_config_map =
-            retroarch::parse_retroarch_config(&settings.retroarch_config, &keys_to_get)?;
+            retroarch::parse_retroarch_config(settings.retroarch_config.as_ref(), &keys_to_get)?;
 
         // Extract values.
         if let Some(value) = retroarch_config_map.get("libretro_directory") {
@@ -241,7 +241,7 @@ impl Settings {
     /// [.md, .gen]
     /// libretro = genesis_plus_gx
     /// ```
-    pub fn new_from_config(file: &Option<PathBuf>) -> Result<Self> {
+    pub fn new_from_config(file: Option<&PathBuf>) -> Result<Self> {
         let mut settings: Self = Self::new();
 
         let path: PathBuf = match file {
@@ -257,7 +257,7 @@ impl Settings {
         };
 
         let mut ini: ini::Ini = ini::Ini::new_cs();
-        ini.load(&file::to_str(settings.config.as_ref()))
+        ini.load(file::to_str(settings.config.as_ref()))
             .expect("Error in loading configuration file.");
 
         let section_names: Vec<String> = ini.sections();
@@ -277,7 +277,7 @@ impl Settings {
         // core = snes
         // libretro = snes9x
         let extension_rules: IndexMap<String, PathBuf> =
-            Self::read_config_extension_rules(&settings.cores_rules, &ini, &section_names);
+            Self::read_config_extension_rules(settings.cores_rules.as_ref(), &ini, &section_names);
         if !extension_rules.is_empty() {
             settings.extension_rules.replace(extension_rules);
         }
@@ -285,7 +285,7 @@ impl Settings {
         // [/home/user/roms/genesis_wide]
         // core = mdwide
         let directory_rules: IndexMap<String, PathBuf> =
-            Self::read_config_directory_rules(&settings.cores_rules, &ini, &section_names);
+            Self::read_config_directory_rules(settings.cores_rules.as_ref(), &ini, &section_names);
         if !directory_rules.is_empty() {
             settings.directory_rules.replace(directory_rules);
         }
@@ -416,7 +416,7 @@ impl Settings {
     /// core = snes
     /// ```
     fn read_config_extension_rules(
-        cores_rules: &Option<IndexMap<String, PathBuf>>,
+        cores_rules: Option<&IndexMap<String, PathBuf>>,
         ini: &ini::Ini,
         section_names: &[String],
     ) -> IndexMap<String, PathBuf> {
@@ -460,7 +460,7 @@ impl Settings {
     /// core = mdwide
     /// ```
     fn read_config_directory_rules(
-        cores_rules: &Option<IndexMap<String, PathBuf>>,
+        cores_rules: Option<&IndexMap<String, PathBuf>>,
         ini: &ini::Ini,
         section_names: &[String],
     ) -> IndexMap<String, PathBuf> {
@@ -876,18 +876,18 @@ impl Settings {
     /// Get the user configuration INI file path from `config` option in current Settings.  Default
     /// to `None`, if option `noconfig` is active.
     #[must_use]
-    pub fn get_config(&self) -> &Option<PathBuf> {
+    pub fn get_config(&self) -> Option<&PathBuf> {
         if self.noconfig.unwrap_or(false) {
-            &None
+            None
         } else {
-            &self.config
+            self.config.as_ref()
         }
     }
 
     /// Get the `RetroArchs` own `retroarch.cfg` configuration file path from current Settings.
     #[must_use]
-    pub const fn get_retroarch_config(&self) -> &Option<PathBuf> {
-        &self.retroarch_config
+    pub const fn get_retroarch_config(&self) -> Option<&PathBuf> {
+        self.retroarch_config.as_ref()
     }
 
     /// Check if current Settings has a `game` path entry available.
@@ -924,16 +924,16 @@ impl Settings {
     }
 
     /// Print the given `path`, if current Settings include the option `which`.
-    pub fn print_which(&self, path: PathBuf) {
+    pub fn print_which(&self, path: &PathBuf) {
         if self.which.unwrap_or(false) {
-            inoutput::print_path(&Some(path));
+            inoutput::print_path(Some(path));
         }
     }
 
     /// Print path of user settings file defined in `config`.
     pub fn print_config(&self) -> bool {
         if self.config_path.unwrap_or(false) {
-            inoutput::print_fullpath(&self.config);
+            inoutput::print_fullpath(self.config.as_ref());
             return true;
         }
 
@@ -1218,7 +1218,7 @@ mod tests {
         let ini = test_ini_template();
 
         let ext_rules = super::Settings::read_config_extension_rules(
-            &Some(test_ini_cores_rules_template()),
+            Some(test_ini_cores_rules_template()).as_ref(),
             &ini,
             &ini.sections(),
         );
@@ -1236,7 +1236,7 @@ mod tests {
         let ini = test_ini_template();
 
         let dir_rules = super::Settings::read_config_directory_rules(
-            &Some(test_ini_cores_rules_template()),
+            Some(test_ini_cores_rules_template()).as_ref(),
             &ini,
             &ini.sections(),
         );

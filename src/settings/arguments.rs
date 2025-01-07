@@ -77,7 +77,7 @@ pub struct Opt {
 
     /// Path or name of `RetroArch` command
     ///
-    /// The executable name or path to the RetroArch commandline application to run.  If this is a
+    /// The executable name or path to the `RetroArch` commandline application to run.  If this is a
     /// filename without directory part, then the systems `$PATH` is searched.
     ///
     /// Example: "/usr/bin/retroarch" [default: retroarch]
@@ -162,9 +162,9 @@ pub struct Opt {
     #[arg(short = 'w', long, display_order = 1)]
     pub which: bool,
 
-    /// Print RetroArch commandline
+    /// Print `RetroArch` commandline
     ///
-    /// Writes full command with all arguments used to run RetroArch to stdout. Has higher priority
+    /// Writes full command with all arguments used to run `RetroArch` to stdout. Has higher priority
     /// than option --which.
     #[arg(short = 'W', long, display_order = 1)]
     pub which_command: bool,
