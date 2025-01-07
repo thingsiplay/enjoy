@@ -2,6 +2,13 @@
 
 Keep track of changes for [enjoy](https://github.com/thingsiplay/enjoy) .
 
+## Future
+
+- changed: symbolic links are no longer followed for all files, meaning that
+  paths are passed over to RetroArch executable as symlink if its one, instead
+  resolving to its target
+- new: option `-l`, `--resolve` to follow symbolic links on Rom files
+
 ## [0.5.0] - April 18, 2024
 
 - changed: the options parser and help text from `-h` or `--help` has no
