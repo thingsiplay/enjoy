@@ -50,6 +50,7 @@ pub struct Settings {
     which_command: Option<bool>,
     list_cores: Option<bool>,
     fullscreen: Option<bool>,
+    resolve: Option<bool>,
     highlander: Option<bool>,
     open_config: Option<bool>,
     config_path: Option<bool>,
@@ -85,6 +86,7 @@ impl Settings {
             which_command: None,
             list_cores: None,
             fullscreen: None,
+            resolve: None,
             highlander: None,
             open_config: None,
             config_path: None,
@@ -162,6 +164,9 @@ impl Settings {
         }
         if args.fullscreen {
             settings.fullscreen = Some(true);
+        }
+        if args.resolve {
+            settings.resolve = Some(true);
         }
         if args.highlander {
             settings.highlander = Some(true);
@@ -357,6 +362,9 @@ impl Settings {
             if let Some(value) = ini.getboolcoerce("options", "fullscreen")? {
                 settings.fullscreen = Some(value);
             }
+            if let Some(value) = ini.getboolcoerce("options", "resolve")? {
+                settings.resolve = Some(value);
+            }
             if let Some(value) = ini.getboolcoerce("options", "highlander")? {
                 settings.highlander = Some(value);
             }
@@ -548,6 +556,9 @@ impl Settings {
         if overwrite.fullscreen.is_some() {
             self.fullscreen = overwrite.fullscreen;
         }
+        if overwrite.resolve.is_some() {
+            self.resolve = overwrite.resolve;
+        }
         if overwrite.highlander.is_some() {
             self.highlander = overwrite.highlander;
         }
@@ -610,7 +621,7 @@ impl Settings {
         // Get first entry of all games in the list, make it a full path and check if file exists.
         let game: Option<PathBuf> = match self.select_game() {
             Some(selected) => {
-                let path = file::to_fullpath(&selected, false);
+                let path = file::to_fullpath(&selected, self.resolve.unwrap_or_default());
                 match path {
                     Some(ref p) => command.arg(p),
                     None => {
@@ -1019,6 +1030,7 @@ mod tests {
             which_command: None,
             list_cores: None,
             fullscreen: None,
+            resolve: None,
             highlander: None,
             open_config: None,
             config_path: None,
@@ -1260,6 +1272,7 @@ mod tests {
             which_command: None,
             list_cores: None,
             fullscreen: None,
+            resolve: None,
             highlander: Some(true),
             open_config: None,
             config_path: None,
@@ -1314,6 +1327,7 @@ mod tests {
             which_command: None,
             list_cores: None,
             fullscreen: None,
+            resolve: None,
             highlander: Some(true),
             open_config: None,
             config_path: None,
@@ -1365,6 +1379,7 @@ mod tests {
             which_command: None,
             list_cores: None,
             fullscreen: None,
+            resolve: None,
             highlander: Some(true),
             open_config: None,
             config_path: None,
@@ -1408,6 +1423,7 @@ mod tests {
             which_command: None,
             list_cores: None,
             fullscreen: None,
+            resolve: None,
             highlander: None,
             open_config: None,
             config_path: None,

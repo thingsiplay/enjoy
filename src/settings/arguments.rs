@@ -183,6 +183,14 @@ pub struct Opt {
     #[arg(short = 'F', long, display_order = 3)]
     pub fullscreen: bool,
 
+    /// Follow symbolic links
+    ///
+    /// When expanding paths, this option will ensure the Rom file path will resolve symbolic links
+    /// too. Otherwise the program will only see and run the command with the symlink Rom file
+    /// instead, which can have a different name and location than its target.
+    #[arg(short = 'l', long, display_order = 3)]
+    pub resolve: bool,
+
     /// There Can Only Be One!
     ///
     /// Prevents running another `retroarch` process, if one is already active.  In this case the
