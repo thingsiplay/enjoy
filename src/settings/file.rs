@@ -2,9 +2,11 @@ use std::error::Error;
 use std::path::Path;
 use std::path::PathBuf;
 
+use path_absolutize::Absolutize;
+
 /// Opens a file with the associated default application.  It must be af file, not a folder.
 pub fn open_with_default(file: &Path) -> Result<(), Box<dyn Error>> {
-    let fullpath: PathBuf = match to_fullpath(file) {
+    let fullpath: PathBuf = match to_fullpath(file, false) {
         Some(fullpath) => fullpath,
         None => return Err("Problem finding the config file.".into()),
     };
@@ -24,12 +26,22 @@ pub fn open_with_default(file: &Path) -> Result<(), Box<dyn Error>> {
 
 /// Expands tilde and environmental variables in a `Path` and canonicalize to fullpath into a
 /// `PathBuf`.  `None` if not possible.
-pub fn to_fullpath(file: &Path) -> Option<PathBuf> {
+pub fn to_fullpath(file: &Path, canonicalize: bool) -> Option<PathBuf> {
     match shellexpand::full(&file.display().to_string()) {
-        Ok(path) => match PathBuf::from(path.to_string()).canonicalize() {
-            Ok(fullpath) => Some(fullpath),
-            Err(_) => None,
-        },
+        Ok(path) => {
+            let p = PathBuf::from(path.to_string());
+            if canonicalize {
+                match p.canonicalize() {
+                    Ok(fullpath) => Some(fullpath),
+                    Err(_) => None,
+                }
+            } else {
+                match p.absolutize() {
+                    Ok(fullpath) => Some(fullpath.into_owned()),
+                    Err(_) => None,
+                }
+            }
+        }
         Err(_) => None,
     }
 }
@@ -85,7 +97,7 @@ mod tests {
     #[test]
     fn to_fullpath_empty() {
         let path: PathBuf = PathBuf::from("");
-        let output = super::to_fullpath(&path);
+        let output = super::to_fullpath(&path, false);
 
         assert_eq!(output, None);
     }
@@ -93,7 +105,7 @@ mod tests {
     #[test]
     fn to_fullpath_root() {
         let path: PathBuf = PathBuf::from("/");
-        let output = super::to_fullpath(&path);
+        let output = super::to_fullpath(&path, false);
 
         assert_eq!(output, Some(PathBuf::from("/")));
     }
@@ -101,7 +113,7 @@ mod tests {
     #[test]
     fn to_fullpath_above_home() {
         let path: PathBuf = PathBuf::from("$HOME/../");
-        let output = super::to_fullpath(&path);
+        let output = super::to_fullpath(&path, false);
 
         assert_eq!(output, Some(PathBuf::from("/home")));
     }
@@ -109,7 +121,7 @@ mod tests {
     #[test]
     fn to_fullpath_does_not_exist() {
         let path: PathBuf = PathBuf::from("~/../../bin/filedoesnotexist!(@)/$+");
-        let output = super::to_fullpath(&path);
+        let output = super::to_fullpath(&path, false);
 
         assert_eq!(output, None);
     }

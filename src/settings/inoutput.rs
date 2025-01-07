@@ -33,7 +33,7 @@ pub fn print_path(path: &Option<PathBuf>) {
 pub fn print_fullpath(path: &Option<PathBuf>) {
     match path {
         Some(file) => {
-            if let Some(fullpath) = file::to_fullpath(file) {
+            if let Some(fullpath) = file::to_fullpath(file, false) {
                 println!("{}", fullpath.display());
             }
         }

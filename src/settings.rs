@@ -192,7 +192,7 @@ impl Settings {
 
         // If no file was given, then search at `RetroArch` default locations for the file `retroarch.cfg`.
         settings.retroarch_config = match file {
-            Some(p) => file::to_fullpath(p),
+            Some(p) => file::to_fullpath(p, false),
             None => retroarch::search_default_config(),
         };
 
@@ -244,7 +244,7 @@ impl Settings {
             None => return Ok(settings),
         };
         // Extend the path and resolve to fullpath.
-        match file::to_fullpath(&path) {
+        match file::to_fullpath(&path, false) {
             Some(fullpath) => settings.config = Some(fullpath),
             None => {
                 return Err(format!("User config ini file not found: {}", path.display()).into());
@@ -610,7 +610,7 @@ impl Settings {
         // Get first entry of all games in the list, make it a full path and check if file exists.
         let game: Option<PathBuf> = match self.select_game() {
             Some(selected) => {
-                let path = file::to_fullpath(&selected);
+                let path = file::to_fullpath(&selected, false);
                 match path {
                     Some(ref p) => command.arg(p),
                     None => {
@@ -852,7 +852,7 @@ impl Settings {
                 .as_ref()
                 .expect("Path to config ini file required.");
 
-            if let Some(path) = file::to_fullpath(config_path) {
+            if let Some(path) = file::to_fullpath(config_path, false) {
                 file::open_with_default(&path)?;
             }
 

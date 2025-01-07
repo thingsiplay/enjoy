@@ -116,7 +116,7 @@ pub fn libretro_fullpath(
     fullpath = fullpath.join(file::tilde(&libretro.unwrap_or_default()));
     fullpath = file::endswith(endswith, fullpath);
 
-    file::to_fullpath(&fullpath)
+    file::to_fullpath(&fullpath, false)
 }
 
 #[cfg(test)]
