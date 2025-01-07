@@ -14,7 +14,7 @@ COMPRESS_DIST_BIN:=0
 # Create and copy the debug build into distribution folder.
 # 0=disable
 # 1=enable
-BUILD_DEBUG:=1
+BUILD_DEBUG:=0
 
 APP_NAME=$(shell grep -E '^\s*name\s*=' Cargo.toml | grep -o '".*"' | tr -d '"')
 APP_DEBUG_NAME=$(APP_NAME)d
