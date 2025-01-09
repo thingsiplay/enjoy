@@ -129,14 +129,14 @@ pub struct Opt {
     /// The main directory for shaders. This is used as base dir whenever the `shader` path is a
     /// relative filename. At default this directory is extracted from variable `video_shader_dir`
     /// at `RetroArch` base configuration file `retroarch.cfg`.
-    #[arg(short = 'P', long, value_name = "DIR", display_order = 7)]
+    #[arg(short = 'S', long, value_name = "DIR", display_order = 7)]
     pub shader_directory: Option<PathBuf>,
 
     /// Filename or path to a shader preset
     ///
     /// Force a specific shader preset. If this is a relative path, then the file is looked up in
     /// `shader_directory` . If an extension is missing, then `.slangp` is assumed automatically.
-    #[arg(short = 'p', long, value_name = "FILE", display_order = 7)]
+    #[arg(short = 's', long, value_name = "FILE", display_order = 7)]
     pub shader: Option<PathBuf>,
 
     /// Force specific libretro core by user defined alias
@@ -163,12 +163,12 @@ pub struct Opt {
     #[arg(short = 'f', long, value_name = "PATTERN", display_order = 2)]
     pub filter: Option<Vec<String>>,
 
-    /// Strict mode for filter
+    /// Strict or precise mode for filter
     ///
     /// Turns the option `--filter` to be more strict when comparing filenames.  It makes it case
     /// sensitive and a word will match the beginning to end of filename, no longer are stars "*"
     /// surrounding the search pattern added to match any part.
-    #[arg(short = 's', long, display_order = 2)]
+    #[arg(short = 'p', long, display_order = 2)]
     pub strict: bool,
 
     /// Print selected game ROM
