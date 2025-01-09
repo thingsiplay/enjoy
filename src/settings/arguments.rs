@@ -124,6 +124,21 @@ pub struct Opt {
     #[arg(short = 'D', long, value_name = "DIR", display_order = 6)]
     pub libretro_directory: Option<PathBuf>,
 
+    /// Directory of retroarch shaders
+    ///
+    /// The main directory for shaders. This is used as base dir whenever the `shader` path is a
+    /// relative filename. At default this directory is extracted from variable `video_shader_dir`
+    /// at `RetroArch` base configuration file `retroarch.cfg`.
+    #[arg(short = 'P', long, value_name = "DIR", display_order = 7)]
+    pub shader_directory: Option<PathBuf>,
+
+    /// Filename or path to a shader preset
+    ///
+    /// Force a specific shader preset. If this is a relative path, then the file is looked up in
+    /// `shader_directory` . If an extension is missing, then `.slangp` is assumed automatically.
+    #[arg(short = 'p', long, value_name = "FILE", display_order = 7)]
+    pub shader: Option<PathBuf>,
+
     /// Force specific libretro core by user defined alias
     ///
     /// A custom identificator specified in the user configuration INI file.  The alias will be

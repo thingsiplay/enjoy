@@ -46,6 +46,8 @@ pub struct Settings {
     core: Option<String>,
     filter: Option<Vec<String>>,
     strict: Option<bool>,
+    shader_directory: Option<PathBuf>,
+    shader: Option<PathBuf>,
     which: Option<bool>,
     which_command: Option<bool>,
     list_cores: Option<bool>,
@@ -82,6 +84,8 @@ impl Settings {
             core: None,
             filter: None,
             strict: None,
+            shader_directory: None,
+            shader: None,
             which: None,
             which_command: None,
             list_cores: None,
@@ -147,6 +151,8 @@ impl Settings {
         settings.libretro_directory = args.libretro_directory;
         settings.core = args.core;
         settings.filter = args.filter;
+        settings.shader_directory = args.shader_directory;
+        settings.shader = args.shader;
 
         // bool
         // Only set it to `true`, if the option is found in arguments.
@@ -204,6 +210,7 @@ impl Settings {
         // The list of key names to search and extract.  Ignore all other.
         let mut keys_to_get: HashSet<String> = HashSet::new();
         keys_to_get.insert("libretro_directory".to_string());
+        keys_to_get.insert("video_shader_dir".to_string());
 
         let retroarch_config_map =
             retroarch::parse_retroarch_config(settings.retroarch_config.as_ref(), &keys_to_get)?;
@@ -211,6 +218,9 @@ impl Settings {
         // Extract values.
         if let Some(value) = retroarch_config_map.get("libretro_directory") {
             settings.libretro_directory = Some(PathBuf::from(value));
+        }
+        if let Some(value) = retroarch_config_map.get("video_shader_dir") {
+            settings.shader_directory = Some(PathBuf::from(value));
         }
 
         Ok(settings)
@@ -340,6 +350,12 @@ impl Settings {
             }
             if let Some(value) = ini.get("options", "libretro_directory") {
                 settings.libretro_directory = Some(PathBuf::from(value));
+            }
+            if let Some(value) = ini.get("options", "shader_directory") {
+                settings.shader_directory = Some(PathBuf::from(value));
+            }
+            if let Some(value) = ini.get("options", "shader") {
+                settings.shader = Some(PathBuf::from(value));
             }
             if let Some(value) = ini.get("options", "core") {
                 settings.core = Some(value);
@@ -535,6 +551,12 @@ impl Settings {
         if overwrite.libretro_directory.is_some() {
             self.libretro_directory = overwrite.libretro_directory;
         }
+        if overwrite.shader_directory.is_some() {
+            self.shader_directory = overwrite.shader_directory;
+        }
+        if overwrite.shader.is_some() {
+            self.shader = overwrite.shader;
+        }
         if overwrite.core.is_some() {
             self.core = overwrite.core;
         }
@@ -606,6 +628,9 @@ impl Settings {
         }
         if self.libretro_directory.is_none() {
             self.libretro_directory = overwrite.libretro_directory;
+        }
+        if self.shader_directory.is_none() {
+            self.shader_directory = overwrite.shader_directory;
         }
     }
 
@@ -709,6 +734,19 @@ impl Settings {
         if let Some(file) = &self.retroarch_config {
             command.arg("--config");
             command.arg(file);
+        }
+
+        if let Some(file) = &self.shader {
+            command.arg("--set-shader");
+            let mut path = PathBuf::new();
+            if file.is_relative() {
+                path = self.shader_directory.clone().unwrap_or_default();
+            }
+            path.push(file);
+            if path.extension().unwrap_or_default() == "" {
+                path = path.with_extension("slangp");
+            }
+            command.arg(file::tilde(&path));
         }
 
         // `--fullscreen`
@@ -1026,6 +1064,8 @@ mod tests {
             core: None,
             filter: None,
             strict: None,
+            shader_directory: None,
+            shader: None,
             which: None,
             which_command: None,
             list_cores: None,
@@ -1268,6 +1308,8 @@ mod tests {
             core: None,
             filter: Some(vec!["[!]".to_string()]),
             strict: None,
+            shader_directory: None,
+            shader: None,
             which: None,
             which_command: None,
             list_cores: None,
@@ -1323,6 +1365,8 @@ mod tests {
             core: None,
             filter: Some(vec!["[!]".to_string()]),
             strict: None,
+            shader_directory: None,
+            shader: None,
             which: None,
             which_command: None,
             list_cores: None,
@@ -1375,6 +1419,8 @@ mod tests {
             core: None,
             filter: Some(vec!["[!]".to_string()]),
             strict: None,
+            shader_directory: None,
+            shader: None,
             which: None,
             which_command: None,
             list_cores: None,
@@ -1419,6 +1465,8 @@ mod tests {
             core: None,
             filter: None,
             strict: None,
+            shader_directory: None,
+            shader: None,
             which: None,
             which_command: None,
             list_cores: None,
