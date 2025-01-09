@@ -2,7 +2,7 @@
 
 Keep track of changes for [enjoy](https://github.com/thingsiplay/enjoy) .
 
-## Future
+## [0.6.0] - January 10, 2025
 
 - changed: symbolic links are no longer followed for all files, meaning that
   paths are passed over to RetroArch executable as symlink if its one, instead

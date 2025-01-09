@@ -1,6 +1,6 @@
 [package]
 name = "enjoy"
-version = "0.5.0"
+version = "0.6.0"
 authors = ["Tuncay D <mamehiscore@aol.com>"]
 description = "Play any game rom with associated emulator in RetroArch"
 readme = "README.md"
