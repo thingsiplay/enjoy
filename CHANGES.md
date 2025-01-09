@@ -8,6 +8,10 @@ Keep track of changes for [enjoy](https://github.com/thingsiplay/enjoy) .
   paths are passed over to RetroArch executable as symlink if its one, instead
   resolving to its target
 - new: option `-l`, `--resolve` to follow symbolic links on Rom files
+- new: option `-s`, `--shader` to force a specific shader preset
+- new: option `-S`, `--shader-directory` to set a specific directory for
+  `--shader`
+- changed: previous short option `-s` for `--strict` changed to `-p`
 - removed: no debug builds provided anymore
 
 ## [0.5.0] - April 18, 2024
